@@ -1,0 +1,17 @@
+{
+  "name": "sf-metadata-linter",
+  "version": "0.1.0",
+  "description": "Salesforce Metadata Linter",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "author": "Victor Garcia Zarco",
+  "license": "ISC",
+  "dependencies": {
+    "glob": "^11.0.3",
+    "libxmljs": "^1.0.11",
+    "minimatch": "^10.0.3",
+    "util": "^0.12.5"
+  }
+}
