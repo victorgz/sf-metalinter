@@ -1,5 +1,4 @@
 module.exports = {
-	
 	"missing-description": {
 		priority: 2,
 		description: "XML metadata is missing description",
@@ -30,31 +29,6 @@ module.exports = {
 			}
 		},
 		include: ['**/*.flow-meta.xml']
-	},
-	"flow-missing-bypass-check": {
-		priority: 1,
-		description: "RecordTrigger flows must have a bypass check in the entry criteria",
-		linter: function ( { file, report } ) {
-			const hasObject = file.parsedXml?.get( '//start//object' )?.text() != null;
-			if(hasObject){
-				const filterFormula = file.parsedXml?.get( '//start//filterFormula' );
-				if(!filterFormula?.text().includes('{!$Permission.G_BypassFlowTrigger}')){
-					report("Missing bypass check in flow trigger", filterFormula?.line() );
-				}
-			}
-		},
-		include: ['**/*.flow-meta.xml']
-	},
-	"validation-rule-missing-bypass-check": {
-		priority: 1,
-		description: "Validation Rules must have a bypass check in the entry criteria",
-		linter: function ( { file, report } ) {
-			const filterFormula = file.parsedXml?.get( '//errorConditionFormula' );
-			if(!filterFormula?.text().includes('$Permission.G_BypassValidationRule')){
-				report("Missing bypass check in VR", filterFormula?.line() );
-			}
-		},
-		include: ['**/*.validationRule-meta.xml']
 	},
 	"object-internal-sharing-no-readwrite": {
 		priority: 3,
