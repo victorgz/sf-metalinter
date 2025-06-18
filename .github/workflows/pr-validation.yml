@@ -1,0 +1,54 @@
+name: PR Validation
+
+on:
+  pull_request:
+    branches: [dev, main]
+  workflow_dispatch:
+
+jobs:
+  # Basic validation for all PRs
+  validate:
+    name: Code Quality & Unit Tests
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '20'
+          cache: 'yarn'
+
+      - name: Install dependencies
+        run: yarn install --frozen-lockfile
+
+      - name: Lint
+        run: yarn lint
+
+      - name: Format check
+        run: yarn format --check
+
+      - name: Build
+        run: yarn build
+
+      - name: Unit tests
+        run: yarn test:only
+
+  # Integration tests for PRs to main
+  integration-tests:
+    name: Integration Tests
+    if: github.base_ref == 'main'
+    needs: validate
+    uses: salesforcecli/github-workflows/.github/workflows/nut.yml@main
+    secrets: inherit
+    strategy:
+      matrix:
+        os: [ubuntu-latest, windows-latest]
+      fail-fast: false
+    with:
+      os: ${{ matrix.os }}
+
+  # Installation test for PRs to main
+  installation-test:
+    name: Installation Test
+    if: github.base_ref == 'main'
+    needs: validate
+    uses: ./.github/workflows/pr-installation-test.yml
