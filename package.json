@@ -1,195 +1,195 @@
 {
-	"name": "sf-metalinter",
-	"version": "0.1.4",
-	"description": "Salesforce Metadata Linter",
-	"author": "Victor Garcia Zarco",
-	"license": "BSD-3-Clause",
-	"main": "./lib/index.js",
-	"exports": "./lib/index.js",
-	"repository": {
-		"type": "git",
-		"url": "https://github.com/victorgz/sf-metalinter.git"
-	},
-	"homepage": "https://github.com/victorgz/sf-metalinter#readme",
-	"bugs": {
-		"url": "https://github.com/victorgz/sf-metalinter/issues"
-	},
-	"keywords": [
-		"salesforce",
-		"metadata",
-		"linter",
-		"sf-plugin",
-		"sfdx-plugin",
-		"salesforcedx"
-	],
-	"engines": {
-		"node": ">=18.0.0"
-	},
-	"files": [
-		"/lib",
-		"/messages",
-		"/oclif.manifest.json",
-		"/oclif.lock"
-	],
-	"dependencies": {
-		"@oclif/core": "^4",
-		"@salesforce/core": "^8",
-		"@salesforce/sf-plugins-core": "^12",
-		"fast-xml-parser": "^5.2.5",
-		"glob": "^11.0.3",
-		"minimatch": "^10.0.3",
-		"util": "^0.12.5"
-	},
-	"devDependencies": {
-		"@oclif/plugin-command-snapshot": "^5.1.9",
-		"@salesforce/cli-plugins-testkit": "^5.3.10",
-		"@salesforce/dev-scripts": "^10",
-		"@types/glob": "^8.1.0",
-		"@types/node": "^24.0.3",
-		"eslint-plugin-sf-plugin": "^1.18.6",
-		"oclif": "^4.14.0",
-		"ts-node": "^10.9.2",
-		"typescript": "^5.4.5"
-	},
-	"oclif": {
-		"commands": "./lib/commands",
-		"bin": "sf",
-		"topicSeparator": " ",
-		"devPlugins": [
-			"@oclif/plugin-help"
-		],
-		"topics": {
-			"metalinter": {
-				"description": "Commands to lint Salesforce metadata files."
-			}
-		},
-		"flexibleTaxonomy": true
-	},
-	"scripts": {
-		"build": "wireit",
-		"clean": "sf-clean",
-		"clean-all": "sf-clean all",
-		"compile": "wireit",
-		"format": "wireit",
-		"lint": "wireit",
-		"postpack": "sf-clean --ignore-signing-artifacts",
-		"prepack": "sf-prepack",
-		"test": "wireit",
-		"test:only": "wireit",
-		"version": "oclif readme"
-	},
-	"publishConfig": {
-		"access": "public"
-	},
-	"wireit": {
-		"build": {
-			"dependencies": [
-				"compile",
-				"lint"
-			]
-		},
-		"compile": {
-			"command": "tsc -p . --pretty --incremental",
-			"files": [
-				"src/**/*.ts",
-				"**/tsconfig.json",
-				"messages/**"
-			],
-			"output": [
-				"lib/**",
-				"*.tsbuildinfo"
-			],
-			"clean": "if-file-deleted"
-		},
-		"format": {
-			"command": "prettier --write \"+(src|test|schemas)/**/*.+(ts|js|json)|command-snapshot.json\"",
-			"files": [
-				"src/**/*.ts",
-				"test/**/*.ts",
-				"schemas/**/*.json",
-				"command-snapshot.json",
-				".prettier*"
-			],
-			"output": []
-		},
-		"lint": {
-			"command": "eslint src --color --cache --cache-location .eslintcache",
-			"files": [
-				"src/**/*.ts",
-				"src/**/*.js",
-				"messages/**",
-				"**/.eslint*",
-				"**/tsconfig.json"
-			],
-			"output": []
-		},
-		"test:compile": {
-			"command": "tsc -p \"./test\" --pretty",
-			"files": [
-				"test/**/*.ts",
-				"**/tsconfig.json"
-			],
-			"output": []
-		},
-		"test": {
-			"dependencies": [
-				"test:compile",
-				"test:only",
-				"lint"
-			]
-		},
-		"test:only": {
-			"command": "nyc mocha \"test/**/*.test.ts\"",
-			"env": {
-				"FORCE_COLOR": "2"
-			},
-			"files": [
-				"test/**/*.ts",
-				"src/**/*.ts",
-				"**/tsconfig.json",
-				".mocha*",
-				"!*.nut.ts",
-				".nycrc"
-			],
-			"output": []
-		},
-		"test:command-reference": {
-			"command": "node --loader ts-node/esm --no-warnings=ExperimentalWarning \"./bin/dev.js\" commandreference:generate --erroronwarnings",
-			"files": [
-				"src/**/*.ts",
-				"messages/**",
-				"package.json"
-			],
-			"output": [
-				"tmp/root"
-			]
-		},
-		"test:deprecation-policy": {
-			"command": "node --loader ts-node/esm --no-warnings=ExperimentalWarning \"./bin/dev.js\" snapshot:compare",
-			"files": [
-				"src/**/*.ts"
-			],
-			"output": [],
-			"dependencies": [
-				"compile"
-			]
-		},
-		"test:json-schema": {
-			"command": "node --loader ts-node/esm --no-warnings=ExperimentalWarning \"./bin/dev.js\" schema:compare",
-			"files": [
-				"src/**/*.ts",
-				"schemas"
-			],
-			"output": []
-		},
-		"link-check": {
-			"command": "node -e \"process.exit(process.env.CI ? 0 : 1)\" || linkinator \"**/*.md\" --skip \"CHANGELOG.md|node_modules|test/|confluence.internal.salesforce.com|my.salesforce.com|%s\" --markdown --retry --directory-listing --verbosity error",
-			"files": [
-				"./*.md",
-				"./!(CHANGELOG).md",
-				"messages/**/*.md"
-			],
-			"output": []
-		}
-	}
+  "name": "sf-metalinter",
+  "version": "0.1.4",
+  "description": "Salesforce Metadata Linter",
+  "author": "Victor Garcia Zarco",
+  "license": "BSD-3-Clause",
+  "main": "./lib/index.js",
+  "exports": "./lib/index.js",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/victorgz/sf-metalinter.git"
+  },
+  "homepage": "https://github.com/victorgz/sf-metalinter#readme",
+  "bugs": {
+    "url": "https://github.com/victorgz/sf-metalinter/issues"
+  },
+  "keywords": [
+    "salesforce",
+    "metadata",
+    "linter",
+    "sf-plugin",
+    "sfdx-plugin",
+    "salesforcedx"
+  ],
+  "engines": {
+    "node": ">=20.0.0"
+  },
+  "files": [
+    "/lib",
+    "/messages",
+    "/oclif.manifest.json",
+    "/oclif.lock"
+  ],
+  "dependencies": {
+    "@oclif/core": "^4",
+    "@salesforce/core": "^8",
+    "@salesforce/sf-plugins-core": "^12",
+    "fast-xml-parser": "^5.2.5",
+    "glob": "^11.0.3",
+    "minimatch": "^10.0.3",
+    "util": "^0.12.5"
+  },
+  "devDependencies": {
+    "@oclif/plugin-command-snapshot": "^5.1.9",
+    "@salesforce/cli-plugins-testkit": "^5.3.10",
+    "@salesforce/dev-scripts": "^10",
+    "@types/glob": "^8.1.0",
+    "@types/node": "^24.0.3",
+    "eslint-plugin-sf-plugin": "^1.18.6",
+    "oclif": "^4.14.0",
+    "ts-node": "^10.9.2",
+    "typescript": "^5.4.5"
+  },
+  "oclif": {
+    "commands": "./lib/commands",
+    "bin": "sf",
+    "topicSeparator": " ",
+    "devPlugins": [
+      "@oclif/plugin-help"
+    ],
+    "topics": {
+      "metalinter": {
+        "description": "Commands to lint Salesforce metadata files."
+      }
+    },
+    "flexibleTaxonomy": true
+  },
+  "scripts": {
+    "build": "wireit",
+    "clean": "sf-clean",
+    "clean-all": "sf-clean all",
+    "compile": "wireit",
+    "format": "wireit",
+    "lint": "wireit",
+    "postpack": "sf-clean --ignore-signing-artifacts",
+    "prepack": "sf-prepack",
+    "test": "wireit",
+    "test:only": "wireit",
+    "version": "oclif readme"
+  },
+  "publishConfig": {
+    "access": "public"
+  },
+  "wireit": {
+    "build": {
+      "dependencies": [
+        "compile",
+        "lint"
+      ]
+    },
+    "compile": {
+      "command": "tsc -p . --pretty --incremental",
+      "files": [
+        "src/**/*.ts",
+        "**/tsconfig.json",
+        "messages/**"
+      ],
+      "output": [
+        "lib/**",
+        "*.tsbuildinfo"
+      ],
+      "clean": "if-file-deleted"
+    },
+    "format": {
+      "command": "prettier --write \"+(src|test|schemas)/**/*.+(ts|js|json)|command-snapshot.json\"",
+      "files": [
+        "src/**/*.ts",
+        "test/**/*.ts",
+        "schemas/**/*.json",
+        "command-snapshot.json",
+        ".prettier*"
+      ],
+      "output": []
+    },
+    "lint": {
+      "command": "eslint src --color --cache --cache-location .eslintcache",
+      "files": [
+        "src/**/*.ts",
+        "src/**/*.js",
+        "messages/**",
+        "**/.eslint*",
+        "**/tsconfig.json"
+      ],
+      "output": []
+    },
+    "test:compile": {
+      "command": "tsc -p \"./test\" --pretty",
+      "files": [
+        "test/**/*.ts",
+        "**/tsconfig.json"
+      ],
+      "output": []
+    },
+    "test": {
+      "dependencies": [
+        "test:compile",
+        "test:only",
+        "lint"
+      ]
+    },
+    "test:only": {
+      "command": "nyc mocha \"test/**/*.test.ts\"",
+      "env": {
+        "FORCE_COLOR": "2"
+      },
+      "files": [
+        "test/**/*.ts",
+        "src/**/*.ts",
+        "**/tsconfig.json",
+        ".mocha*",
+        "!*.nut.ts",
+        ".nycrc"
+      ],
+      "output": []
+    },
+    "test:command-reference": {
+      "command": "node --loader ts-node/esm --no-warnings=ExperimentalWarning \"./bin/dev.js\" commandreference:generate --erroronwarnings",
+      "files": [
+        "src/**/*.ts",
+        "messages/**",
+        "package.json"
+      ],
+      "output": [
+        "tmp/root"
+      ]
+    },
+    "test:deprecation-policy": {
+      "command": "node --loader ts-node/esm --no-warnings=ExperimentalWarning \"./bin/dev.js\" snapshot:compare",
+      "files": [
+        "src/**/*.ts"
+      ],
+      "output": [],
+      "dependencies": [
+        "compile"
+      ]
+    },
+    "test:json-schema": {
+      "command": "node --loader ts-node/esm --no-warnings=ExperimentalWarning \"./bin/dev.js\" schema:compare",
+      "files": [
+        "src/**/*.ts",
+        "schemas"
+      ],
+      "output": []
+    },
+    "link-check": {
+      "command": "node -e \"process.exit(process.env.CI ? 0 : 1)\" || linkinator \"**/*.md\" --skip \"CHANGELOG.md|node_modules|test/|confluence.internal.salesforce.com|my.salesforce.com|%s\" --markdown --retry --directory-listing --verbosity error",
+      "files": [
+        "./*.md",
+        "./!(CHANGELOG).md",
+        "messages/**/*.md"
+      ],
+      "output": []
+    }
+  }
 }
