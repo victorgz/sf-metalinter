@@ -56,8 +56,9 @@ jobs:
         run: |
           $tarball = Get-ChildItem -Name "sf-metalinter-*.tgz" | Select-Object -First 1
           $absolutePath = Join-Path $PWD $tarball
-          Write-Host "Installing from: $absolutePath"
-          echo "y" | sf plugins install $absolutePath
+          $fileUrl = "file:///" + $absolutePath.Replace('\', '/')
+          Write-Host "Installing from: $fileUrl"
+          echo "y" | sf plugins install $fileUrl
         shell: powershell
 
       - name: Verify plugin installation
