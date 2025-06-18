@@ -1,5 +1,5 @@
 declare const _exports: {
-    "missing-description": {
+    'missing-description': {
         priority: number;
         description: string;
         linter: ({ file, report }: {
@@ -7,7 +7,7 @@ declare const _exports: {
             report: any;
         }) => void;
     };
-    "deprecated-api-version": {
+    'deprecated-api-version': {
         priority: number;
         description: string;
         linter: ({ file, report }: {
@@ -15,16 +15,7 @@ declare const _exports: {
             report: any;
         }) => void;
     };
-    "flow-inactive": {
-        priority: number;
-        description: string;
-        linter: ({ file, report }: {
-            file: any;
-            report: any;
-        }) => void;
-        include: string[];
-    };
-    "object-internal-sharing-no-readwrite": {
+    'flow-inactive': {
         priority: number;
         description: string;
         linter: ({ file, report }: {
@@ -33,7 +24,16 @@ declare const _exports: {
         }) => void;
         include: string[];
     };
-    "object-external-sharing-no-readwrite": {
+    'object-internal-sharing-no-readwrite': {
+        priority: number;
+        description: string;
+        linter: ({ file, report }: {
+            file: any;
+            report: any;
+        }) => void;
+        include: string[];
+    };
+    'object-external-sharing-no-readwrite': {
         priority: number;
         description: string;
         linter: ({ file, report }: {
