@@ -1,5 +1,5 @@
 {
-	"name": "metalinter",
+	"name": "sf-metalinter",
 	"version": "0.1.0",
 	"description": "Salesforce Metadata Linter",
 	"dependencies": {
