@@ -1,3 +1,15 @@
+# [0.2.0](https://github.com/victorgz/sf-metalinter/compare/v0.1.5...v0.2.0) (2025-06-18)
+
+
+### Bug Fixes
+
+* repository url in package ([038cdb6](https://github.com/victorgz/sf-metalinter/commit/038cdb6dafacddf1ff082428a776765523344072))
+
+
+### Features
+
+* display total number of results ([c982220](https://github.com/victorgz/sf-metalinter/commit/c982220d907d69a3bebba7a789cea78a095e54b2))
+
 ## [0.1.5](https://github.com/victorgz/sf-metalinter/compare/v0.1.4...v0.1.5) (2025-06-18)
 
 
