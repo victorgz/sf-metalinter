@@ -44,8 +44,11 @@ jobs:
       - name: Install plugin from packed tarball
         run: |
           TARBALL=$(find . -name "sf-metalinter-*.tgz" | head -1)
-          echo "Installing from: $TARBALL"
-          echo "y" | sf plugins install "file://$PWD/$TARBALL"
+          # Remove the ./ prefix if present
+          TARBALL=${TARBALL#./}
+          ABSOLUTE_PATH="$PWD/$TARBALL"
+          echo "Installing from: $ABSOLUTE_PATH"
+          echo "y" | sf plugins install "file://$ABSOLUTE_PATH"
         shell: bash
 
       - name: Verify plugin installation
