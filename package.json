@@ -1,6 +1,6 @@
 {
 	"name": "sf-metalinter",
-	"version": "0.1.4",
+	"version": "0.1.5",
 	"description": "Salesforce Metadata Linter",
 	"author": "Victor Garcia Zarco",
 	"license": "BSD-3-Clause",
