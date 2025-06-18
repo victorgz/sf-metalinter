@@ -1,6 +1,6 @@
 {
 	"name": "sf-metalinter",
-	"version": "0.1.0",
+	"version": "0.1.1",
 	"description": "Salesforce Metadata Linter",
 	"dependencies": {
 		"@oclif/core": "^4",
