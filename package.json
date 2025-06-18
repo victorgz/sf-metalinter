@@ -1,5 +1,5 @@
 {
-  "name": "sf-metadata-linter",
+  "name": "sf-metalinter",
   "version": "0.1.0",
   "description": "Salesforce Metadata Linter",
   "main": "index.js",
