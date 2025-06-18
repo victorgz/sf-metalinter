@@ -1,1 +1,1 @@
-export { default as MetalinterLint } from './commands/metalinter/lint.js';
+export { default as MetalinterLint } from "./commands/metalinter/lint.js";
