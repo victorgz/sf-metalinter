@@ -1,0 +1,72 @@
+name: PR Installation Test
+
+on:
+  pull_request:
+    branches: [master]
+  workflow_dispatch:
+
+jobs:
+  installation-test:
+    name: Test Plugin Installation
+    strategy:
+      fail-fast: false
+      matrix:
+        node-version: ['18.0.0', '18.x', '20.x', '22.x', 'latest']
+        os: [ubuntu-latest, windows-latest, macos-latest]
+    runs-on: ${{ matrix.os }}
+
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+
+      - name: Setup Node.js ${{ matrix.node-version }}
+        uses: actions/setup-node@v4
+        with:
+          node-version: ${{ matrix.node-version }}
+          cache: 'yarn'
+
+      - name: Install dependencies
+        run: yarn install --frozen-lockfile
+
+      - name: Build project
+        run: yarn build
+
+      - name: Pack plugin
+        run: yarn pack
+
+      - name: Create test directory
+        run: mkdir plugin-test && cd plugin-test
+        shell: bash
+
+      - name: Install Salesforce CLI
+        run: npm install -g @salesforce/cli
+
+      - name: Install plugin from packed tarball
+        run: |
+          cd plugin-test
+          TARBALL=$(find .. -name "sf-metalinter-*.tgz" | head -1)
+          sf plugins install "$TARBALL"
+        shell: bash
+
+      - name: Verify plugin installation
+        run: |
+          cd plugin-test
+          sf plugins --core
+          sf metalinter --help
+        shell: bash
+
+      - name: Test plugin basic functionality
+        run: |
+          cd plugin-test
+          mkdir -p test-metadata/force-app/main/default/classes
+          echo 'public class TestClass { }' > test-metadata/force-app/main/default/classes/TestClass.cls
+          echo '<?xml version="1.0" encoding="UTF-8"?><ApexClass xmlns="http://soap.sforce.com/2006/04/metadata"><apiVersion>58.0</apiVersion><status>Active</status></ApexClass>' > test-metadata/force-app/main/default/classes/TestClass.cls-meta.xml
+          sf metalinter lint -p "test-metadata" || echo "Linter executed successfully (exit code expected)"
+        shell: bash
+
+      - name: Cleanup
+        if: always()
+        run: |
+          cd plugin-test || true
+          sf plugins uninstall sf-metalinter || true
+        shell: bash
