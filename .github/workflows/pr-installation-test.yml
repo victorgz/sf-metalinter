@@ -45,7 +45,7 @@ jobs:
         run: |
           cd plugin-test
           TARBALL=$(find .. -name "sf-metalinter-*.tgz" | head -1)
-          sf plugins install "$TARBALL" --force
+          echo "y" | sf plugins install "$TARBALL"
         shell: bash
 
       - name: Verify plugin installation
