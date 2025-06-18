@@ -1,14 +1,14 @@
-const path = require( 'path' )
-const Rule = require( '../objects/Rule' )
+const path = require('path');
+const Rule = require('../objects/Rule');
 
-function loadRules( rawRules ) {
-	const rules = []
+function loadRules(rawRules) {
+  const rules = [];
 
-	for ( const [ name, def ] of Object.entries( rawRules ) ) {
-		rules.push( new Rule( name, def ) )
-	}
+  for (const [name, def] of Object.entries(rawRules)) {
+    rules.push(new Rule(name, def));
+  }
 
-	return rules
+  return rules;
 }
 
-module.exports = loadRules
+module.exports = loadRules;

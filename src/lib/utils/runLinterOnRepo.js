@@ -1,80 +1,79 @@
-const fs = require( 'fs' ).promises
-const path = require( 'path' )
-const { glob } = require( 'glob' )
-const libxmljs = require( 'libxmljs' )
-const Linter = require( '../objects/Linter' )
+const fs = require('fs').promises;
+const path = require('path');
+const { glob } = require('glob');
+const libxmljs = require('libxmljs');
+const Linter = require('../objects/Linter');
 
-
-async function findMetadataFiles( baseDir, patterns = [ '**/*.*-meta.xml' ] ) {
-	const allMatches = await Promise.all(
-		patterns.map( pattern =>
-			glob( pattern, {
-				cwd: baseDir,        // relative to baseDir
-				absolute: true       // return absolute paths
-			} )
-		)
-	)
-	return allMatches.flat()
+async function findMetadataFiles(baseDir, patterns = ['**/*.*-meta.xml']) {
+  const allMatches = await Promise.all(
+    patterns.map((pattern) =>
+      glob(pattern, {
+        cwd: baseDir, // relative to baseDir
+        absolute: true, // return absolute paths
+      })
+    )
+  );
+  return allMatches.flat();
 }
 
 // Utility: remove xmlns declaration from raw XML
-function removeNamespaces( xmlString ) {
-	return xmlString
-		.replace( /xmlns(:\w+)?="[^"]*"/g, '' ) // removes all xmlns declarations
-		.replace( /<\/?(\w+):/g, '</$1_' )      // e.g. <m:tag> → <m_tag>
+function removeNamespaces(xmlString) {
+  return xmlString
+    .replace(/xmlns(:\w+)?="[^"]*"/g, '') // removes all xmlns declarations
+    .replace(/<\/?(\w+):/g, '</$1_'); // e.g. <m:tag> → <m_tag>
 }
 
-async function parseMetadataFile( filePath ) {
-	const rawContent = await fs.readFile( filePath, 'utf8' )
-	const cleanedContent = removeNamespaces( rawContent )
+async function parseMetadataFile(filePath) {
+  const rawContent = await fs.readFile(filePath, 'utf8');
+  const cleanedContent = removeNamespaces(rawContent);
 
-	let parsedXml = null
-	try {
-		parsedXml = libxmljs.parseXml( cleanedContent );
-	} catch ( err ) {
-		console.warn( `⚠️ Failed to parse XML: ${filePath}`, err.message )
-	}
+  let parsedXml = null;
+  try {
+    parsedXml = libxmljs.parseXml(cleanedContent);
+  } catch (err) {
+    console.warn(`⚠️ Failed to parse XML: ${filePath}`, err.message);
+  }
 
-	return {
-		path: filePath,
-		name: path.basename( filePath ),
-		raw: rawContent,
-		parsedXml // ⬅️ key part!
-	}
+  return {
+    path: filePath,
+    name: path.basename(filePath),
+    raw: rawContent,
+    parsedXml, // ⬅️ key part!
+  };
 }
 
-function extractFakeDescription( content ) {
-	const match = content.match( /<description>(.*?)<\/description>/ )
-	return match ? match[ 1 ] : ''
+function extractFakeDescription(content) {
+  const match = content.match(/<description>(.*?)<\/description>/);
+  return match ? match[1] : '';
 }
 
-async function runLinterOnRepo( paths, rules ) {
-	const linter = new Linter( rules )
-	const resolvedFiles = []
+async function runLinterOnRepo(paths, rules) {
+  const linter = new Linter(rules);
+  const resolvedFiles = [];
 
-	for ( const p of paths ) {
-		const stats = await fs.stat( p )
+  for (const p of paths) {
+    const stats = await fs.stat(p);
 
-		if ( stats.isDirectory() ) {
-			const filesInDir = await findMetadataFiles( p )
-			resolvedFiles.push( ...filesInDir )
-		} else if ( stats.isFile() ) {
-			resolvedFiles.push( p )
-		} else {
-			console.warn( `⚠️ Skipping unsupported path: ${p}` )
-		}
-	}
-	console.log( '✅ Number of files to lint: ', resolvedFiles.length )
+    if (stats.isDirectory()) {
+      const filesInDir = await findMetadataFiles(p);
+      resolvedFiles.push(...filesInDir);
+    } else if (stats.isFile()) {
+      resolvedFiles.push(p);
+    } else {
+      console.warn(`⚠️ Skipping unsupported path: ${p}`);
+    }
+  }
+  console.log('✅ Number of files to lint: ', resolvedFiles.length);
 
-	const results = await Promise.all(
-		resolvedFiles.map( async file => {
-			const metadata = await parseMetadataFile( file )
-			const messages = await linter.runOnFile( metadata )
-			return messages
-		} )
-	)
+  const results = await Promise.all(
+    resolvedFiles.map(async (file) => {
+      const metadata = await parseMetadataFile(file);
+      const messages = await linter.runOnFile(metadata);
+      return messages;
+    })
+  );
 
-	return results.flat()
+  return results.flat();
 }
 
-module.exports = runLinterOnRepo
+module.exports = runLinterOnRepo;

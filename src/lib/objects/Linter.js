@@ -1,21 +1,21 @@
 class Linter {
   constructor(rules) {
-    this.rules = rules
+    this.rules = rules;
   }
 
   async runOnFile(file) {
-    const messages = []
+    const messages = [];
 
     const report = (structuredMessage) => {
-      messages.push(structuredMessage)
-    }
+      messages.push(structuredMessage);
+    };
 
     for (const rule of this.rules) {
-      await rule.run(file, report)
+      await rule.run(file, report);
     }
 
-    return messages
+    return messages;
   }
 }
 
-module.exports = Linter
+module.exports = Linter;

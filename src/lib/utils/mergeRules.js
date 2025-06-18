@@ -1,25 +1,25 @@
-function mergeRules( baseRules, userRules ) {
-	const merged = {}
+function mergeRules(baseRules, userRules) {
+  const merged = {};
 
-	for ( const ruleName in userRules ) {
-		const userRule = userRules[ ruleName ]
-		const baseRule = baseRules[ ruleName ]
+  for (const ruleName in userRules) {
+    const userRule = userRules[ruleName];
+    const baseRule = baseRules[ruleName];
 
-		if ( baseRule ) {
-			// Merge override into base rule (preserving base linter if not overridden)
-			merged[ ruleName ] = {
-				...baseRule,
-				...userRule,
-				linter: baseRule.linter,
-				description: baseRule.description, // Preserve base description
-			}
-		} else {
-			// New custom rule
-			merged[ ruleName ] = userRule
-		}
-	}
+    if (baseRule) {
+      // Merge override into base rule (preserving base linter if not overridden)
+      merged[ruleName] = {
+        ...baseRule,
+        ...userRule,
+        linter: baseRule.linter,
+        description: baseRule.description, // Preserve base description
+      };
+    } else {
+      // New custom rule
+      merged[ruleName] = userRule;
+    }
+  }
 
-	return merged
+  return merged;
 }
 
 module.exports = mergeRules;

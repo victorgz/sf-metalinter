@@ -2,6 +2,35 @@
 	"name": "sf-metalinter",
 	"version": "0.1.1",
 	"description": "Salesforce Metadata Linter",
+	"author": "Victor Garcia Zarco",
+	"license": "BSD-3-Clause",
+	"main": "./lib/index.js",
+	"exports": "./lib/index.js",
+	"repository": {
+		"type": "git",
+		"url": "https://github.com/victorgz/sf-metalinter.git"
+	},
+	"homepage": "https://github.com/victorgz/sf-metalinter#readme",
+	"bugs": {
+		"url": "https://github.com/victorgz/sf-metalinter/issues"
+	},
+	"keywords": [
+		"salesforce",
+		"metadata",
+		"linter",
+		"sf-plugin",
+		"sfdx-plugin",
+		"salesforcedx"
+	],
+	"engines": {
+		"node": ">=18.0.0"
+	},
+	"files": [
+		"/lib",
+		"/messages",
+		"/oclif.manifest.json",
+		"/oclif.lock"
+	],
 	"dependencies": {
 		"@oclif/core": "^4",
 		"@salesforce/core": "^8",
@@ -22,25 +51,6 @@
 		"ts-node": "^10.9.2",
 		"typescript": "^5.4.5"
 	},
-	"engines": {
-		"node": ">=18.0.0"
-	},
-	"files": [
-		"/lib",
-		"/messages",
-		"/oclif.manifest.json",
-		"/oclif.lock"
-	],
-	"keywords": [
-		"force",
-		"salesforce",
-		"salesforcedx",
-		"sf",
-		"sf-plugin",
-		"sfdx",
-		"sfdx-plugin"
-	],
-	"license": "BSD-3-Clause",
 	"oclif": {
 		"commands": "./lib/commands",
 		"bin": "sf",
@@ -49,8 +59,8 @@
 			"@oclif/plugin-help"
 		],
 		"topics": {
-			"hello": {
-				"description": "Commands to say hello."
+			"metalinter": {
+				"description": "Commands to lint Salesforce metadata files."
 			}
 		},
 		"flexibleTaxonomy": true
@@ -181,7 +191,5 @@
 			],
 			"output": []
 		}
-	},
-	"exports": "./lib/index.js",
-	"author": "Victor Garcia Zarco"
+	}
 }
