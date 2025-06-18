@@ -60,19 +60,13 @@
 		"clean": "sf-clean",
 		"clean-all": "sf-clean all",
 		"compile": "wireit",
-		"docs": "sf-docs",
 		"format": "wireit",
-		"link-check": "wireit",
 		"lint": "wireit",
-		"postinstall": "yarn husky install",
 		"postpack": "sf-clean --ignore-signing-artifacts",
 		"prepack": "sf-prepack",
 		"test": "wireit",
-		"test:nuts": "nyc mocha \"**/*.nut.ts\" --slow 4500 --timeout 600000 --parallel",
 		"test:only": "wireit",
-		"version": "oclif readme",
-		"debug": "node --inspect-brk --loader ts-node/esm --no-warnings=ExperimentalWarning ./bin/dev.js",
-		"debug:compiled": "node --inspect-brk ./bin/run.js"
+		"version": "oclif readme"
 	},
 	"publishConfig": {
 		"access": "public"
