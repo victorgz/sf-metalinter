@@ -11,7 +11,7 @@ jobs:
     strategy:
       fail-fast: false
       matrix:
-        node-version: ['20.x', '22.x', 'latest']
+        node-version: ["20.x", "22.x", "latest"]
         os: [ubuntu-latest, windows-latest, macos-latest]
     runs-on: ${{ matrix.os }}
 
@@ -23,7 +23,7 @@ jobs:
         uses: actions/setup-node@v4
         with:
           node-version: ${{ matrix.node-version }}
-          cache: 'yarn'
+          cache: "yarn"
 
       - name: Install dependencies
         run: yarn install --frozen-lockfile
@@ -41,15 +41,24 @@ jobs:
       - name: Install Salesforce CLI
         run: npm install -g @salesforce/cli
 
-      - name: Install plugin from packed tarball
+      - name: Install plugin from packed tarball (Unix)
+        if: runner.os != 'Windows'
         run: |
           TARBALL=$(find . -name "sf-metalinter-*.tgz" | head -1)
-          # Remove the ./ prefix if present
           TARBALL=${TARBALL#./}
           ABSOLUTE_PATH="$PWD/$TARBALL"
           echo "Installing from: $ABSOLUTE_PATH"
           echo "y" | sf plugins install "file://$ABSOLUTE_PATH"
         shell: bash
+
+      - name: Install plugin from packed tarball (Windows)
+        if: runner.os == 'Windows'
+        run: |
+          $tarball = Get-ChildItem -Name "sf-metalinter-*.tgz" | Select-Object -First 1
+          $absolutePath = Join-Path $PWD $tarball
+          Write-Host "Installing from: $absolutePath"
+          echo "y" | sf plugins install $absolutePath
+        shell: powershell
 
       - name: Verify plugin installation
         run: |
