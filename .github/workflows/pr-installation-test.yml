@@ -54,14 +54,12 @@ jobs:
       - name: Install plugin from packed tarball (Windows)
         if: runner.os == 'Windows'
         run: |
-          $tarball = Get-ChildItem -Name "sf-metalinter-*.tgz" | Select-Object -First 1
-          $absolutePath = Join-Path $PWD $tarball
-          $fileUrl = "file:///" + $absolutePath.Replace('\', '/')
-          Write-Host "Installing from: $fileUrl"
-          sf plugins install $fileUrl
-          sleep 3
-          echo "y"
-        shell: powershell
+          for /f %%i in ('dir /b sf-metalinter-*.tgz') do set TARBALL=%%i
+          set ABSOLUTE_PATH=%CD%\%TARBALL%
+          set FILE_URL=file:///%ABSOLUTE_PATH:\=/%
+          echo Installing from: %FILE_URL%
+          echo y | sf plugins install "%FILE_URL%"
+        shell: cmd
 
       - name: Verify plugin installation
         run: |
