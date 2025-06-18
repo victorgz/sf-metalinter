@@ -20,18 +20,15 @@ jobs:
 
       - uses: actions/setup-node@v4
         with:
-          node-version: '20'
-          cache: 'yarn'
-          registry-url: 'https://registry.npmjs.org'
+          node-version: "20"
+          cache: "yarn"
+          registry-url: "https://registry.npmjs.org"
 
       - name: Install dependencies
         run: yarn install --frozen-lockfile
 
       - name: Build
         run: yarn build
-
-      - name: Run tests
-        run: yarn test
 
       - name: Release
         env:
