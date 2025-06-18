@@ -1,145 +1,112 @@
-# metalinter
+# sf-metalinter
 
-[![NPM](https://img.shields.io/npm/v/metalinter.svg?label=metalinter)](https://www.npmjs.com/package/metalinter) [![Downloads/week](https://img.shields.io/npm/dw/metalinter.svg)](https://npmjs.org/package/metalinter) [![License](https://img.shields.io/badge/License-BSD%203--Clause-brightgreen.svg)](https://raw.githubusercontent.com/salesforcecli/metalinter/main/LICENSE.txt)
+A Salesforce CLI plugin for linting Salesforce metadata files to ensure code quality and consistency across your Salesforce projects.
 
-## Using the template
+## Features
 
-This repository provides a template for creating a plugin for the Salesforce CLI. To convert this template to a working plugin:
+- ✅ Lint Salesforce metadata files with customizable rules
+- 🎯 Support for multiple file paths and directories
+- 📋 Custom rule configuration support
+- 🚀 Easy integration with Salesforce CLI workflows
 
-1. Please get in touch with the Platform CLI team. We want to help you develop your plugin.
-2. Generate your plugin:
+## Installation
 
-   ```
-   sf plugins install dev
-   sf dev generate plugin
-
-   git init -b main
-   git add . && git commit -m "chore: initial commit"
-   ```
-
-3. Create your plugin's repo in the salesforcecli github org
-4. When you're ready, replace the contents of this README with the information you want.
-
-## Learn about `sf` plugins
-
-Salesforce CLI plugins are based on the [oclif plugin framework](<(https://oclif.io/docs/introduction.html)>). Read the [plugin developer guide](https://developer.salesforce.com/docs/atlas.en-us.sfdx_cli_plugins.meta/sfdx_cli_plugins/cli_plugins_architecture_sf_cli.htm) to learn about Salesforce CLI plugin development.
-
-This repository contains a lot of additional scripts and tools to help with general Salesforce node development and enforce coding standards. You should familiarize yourself with some of the [node developer packages](#tooling) used by Salesforce. 
-
-Additionally, there are some additional tests that the Salesforce CLI will enforce if this plugin is ever bundled with the CLI. These test are included by default under the `posttest` script and it is required to keep these tests active in your plugin if you plan to have it bundled.
-
-### Tooling
-
-- [@salesforce/core](https://github.com/forcedotcom/sfdx-core)
-- [@salesforce/kit](https://github.com/forcedotcom/kit)
-- [@salesforce/sf-plugins-core](https://github.com/salesforcecli/sf-plugins-core)
-- [@salesforce/ts-types](https://github.com/forcedotcom/ts-types)
-- [@salesforce/ts-sinon](https://github.com/forcedotcom/ts-sinon)
-- [@salesforce/dev-config](https://github.com/forcedotcom/dev-config)
-- [@salesforce/dev-scripts](https://github.com/forcedotcom/dev-scripts)
-
-### Hooks
-
-For cross clouds commands, e.g. `sf env list`, we utilize [oclif hooks](https://oclif.io/docs/hooks) to get the relevant information from installed plugins.
-
-This plugin includes sample hooks in the [src/hooks directory](src/hooks). You'll just need to add the appropriate logic. You can also delete any of the hooks if they aren't required for your plugin.
-
-# Everything past here is only a suggestion as to what should be in your specific plugin's description
-
-This plugin is bundled with the [Salesforce CLI](https://developer.salesforce.com/tools/sfdxcli). For more information on the CLI, read the [getting started guide](https://developer.salesforce.com/docs/atlas.en-us.sfdx_setup.meta/sfdx_setup/sfdx_setup_intro.htm).
-
-We always recommend using the latest version of these commands bundled with the CLI, however, you can install a specific version or tag if needed.
-
-## Install
+Install as a Salesforce CLI plugin:
 
 ```bash
-sf plugins install metalinter@x.y.z
+sf plugins install sf-metalinter
 ```
 
-## Issues
+## Usage
 
-Please report any issues at https://github.com/forcedotcom/cli/issues
-
-## Contributing
-
-1. Please read our [Code of Conduct](CODE_OF_CONDUCT.md)
-2. Create a new issue before starting your project so that we can keep track of
-   what you are trying to add/fix. That way, we can also offer suggestions or
-   let you know if there is already an effort in progress.
-3. Fork this repository.
-4. [Build the plugin locally](#build)
-5. Create a _topic_ branch in your fork. Note, this step is recommended but technically not required if contributing using a fork.
-6. Edit the code in your fork.
-7. Write appropriate tests for your changes. Try to achieve at least 95% code coverage on any new code. No pull request will be accepted without unit tests.
-8. Sign CLA (see [CLA](#cla) below).
-9. Send us a pull request when you are done. We'll review your code, suggest any needed changes, and merge it in.
-
-### CLA
-
-External contributors will be required to sign a Contributor's License
-Agreement. You can do so by going to https://cla.salesforce.com/sign-cla.
-
-### Build
-
-To build the plugin locally, make sure to have yarn installed and run the following commands:
+### Basic Linting
+Lint a specific directory or file:
 
 ```bash
-# Clone the repository
-git clone git@github.com:salesforcecli/metalinter
-
-# Install the dependencies and compile
-yarn && yarn build
+sf metalinter lint --path force-app/main/default
 ```
 
-To use your plugin, run using the local `./bin/dev` or `./bin/dev.cmd` file.
+### Multiple Paths
+Lint multiple directories or files:
 
 ```bash
-# Run using local run file.
-./bin/dev hello world
+sf metalinter lint --path "force-app/main/default,force-app/lwc"
 ```
 
-There should be no differences when running via the Salesforce CLI or using the local run file. However, it can be useful to link the plugin to do some additional testing or run your commands from anywhere on your machine.
+### Custom Rules
+Use custom rules file:
 
 ```bash
-# Link your plugin to the sf cli
-sf plugins link .
-# To verify
-sf plugins
+sf metalinter lint --path force-app/main/default --rules ./my-custom-rules.js
 ```
 
-## Commands
+### Command Options
 
-<!-- commands -->
+| Flag | Short | Description | Required |
+|------|-------|-------------|----------|
+| `--path` | `-p` | Comma-separated list of folders/files to lint | Yes |
+| `--rules` | `-r` | Path to custom rules file | No |
 
-- [`sf hello world`](#sf-hello-world)
+## Dependencies
 
-## `sf hello world`
+This plugin is built with:
 
-Say hello either to the world or someone you know.
+- **[@oclif/core](https://github.com/oclif/core)** - CLI framework
+- **[@salesforce/core](https://github.com/forcedotcom/sfdx-core)** - Salesforce core libraries  
+- **[@salesforce/sf-plugins-core](https://github.com/salesforcecli/sf-plugins-core)** - SF plugin utilities
+- **[libxmljs](https://github.com/libxmljs/libxmljs)** - XML parsing
+- **[glob](https://github.com/isaacs/node-glob)** - File pattern matching
+- **[minimatch](https://github.com/isaacs/minimatch)** - Pattern matching
 
+## Custom Rules
+
+You can create your own custom rules file to extend or override the default linting behavior.
+
+### Creating a Custom Rules File
+
+Create a JavaScript file (e.g., `my-custom-rules.js`) with the following structure:
+
+```javascript
+module.exports = {
+	// Override existing rule priority/scope
+  "missing-description": {
+    priority: 1,
+    include: ['**/*.field-meta.xml'], // Only check fields for descriptions
+    exclude: ['**/*.object-meta.xml']
+  },
+
+	// Create your custom rule
+  "field-missing-help-text": {
+    priority: 2, 
+    description: "Custom fields should have help text",
+    linter: function({ file, report }) {
+      const helpText = file.parsedXml?.get('//inlineHelpText');
+      const fieldType = file.parsedXml?.get('//type');
+      if (!helpText && fieldType) {
+        report("Custom field is missing help text");
+      }
+    },
+    include: ['**/*.field-meta.xml']
+  }
+  
+  
+}
 ```
-USAGE
-  $ sf hello world [--json] [-n <value>]
 
-FLAGS
-  -n, --name=<value>  [default: World] The name of the person you'd like to say hello to.
 
-GLOBAL FLAGS
-  --json  Format output as json.
 
-DESCRIPTION
-  Say hello either to the world or someone you know.
 
-  Say hello either to the world or someone you know.
 
-EXAMPLES
-  Say hello to the world:
+### Using Your Custom Rules
 
-    $ sf hello world
-
-  Say hello to someone you know:
-
-    $ sf hello world --name Astro
+```bash
+sf metalinter lint --path force-app/main/default --rules ./my-custom-rules.js
 ```
 
-<!-- commandsstop -->
+## License
+
+BSD-3-Clause © [Victor Garcia Zarco](https://github.com/victorgz)
+
+---
+
+
