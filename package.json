@@ -68,7 +68,9 @@
 		"test": "wireit",
 		"test:nuts": "nyc mocha \"**/*.nut.ts\" --slow 4500 --timeout 600000 --parallel",
 		"test:only": "wireit",
-		"version": "oclif readme"
+		"version": "oclif readme",
+		"debug": "node --inspect-brk --loader ts-node/esm --no-warnings=ExperimentalWarning ./bin/dev.js",
+		"debug:compiled": "node --inspect-brk ./bin/run.js"
 	},
 	"publishConfig": {
 		"access": "public"
