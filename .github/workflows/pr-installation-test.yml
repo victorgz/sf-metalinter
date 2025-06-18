@@ -58,7 +58,9 @@ jobs:
           $absolutePath = Join-Path $PWD $tarball
           $fileUrl = "file:///" + $absolutePath.Replace('\', '/')
           Write-Host "Installing from: $fileUrl"
-          echo "y" | sf plugins install $fileUrl
+          sf plugins install $fileUrl
+          sleep 3
+          echo "y"
         shell: powershell
 
       - name: Verify plugin installation
