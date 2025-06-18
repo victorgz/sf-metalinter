@@ -1,2 +1,4 @@
-*.cjs/
+*.cjs
 node_modules
+lib/
+!src/**/*.js

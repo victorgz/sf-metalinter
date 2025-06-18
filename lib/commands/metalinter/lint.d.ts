@@ -1,6 +1,7 @@
 export = MetalinterLint;
 declare class MetalinterLint extends Command {
     run(): Promise<void>;
+    printResults(results: any): void;
 }
 declare namespace MetalinterLint {
     let description: string;

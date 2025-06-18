@@ -3,10 +3,16 @@
 	"compilerOptions": {
 		"outDir": "lib",
 		"rootDir": "src",
-		"allowJs": true
+		"allowJs": true,
+		"skipLibCheck": true,
+		"noResolve": false
 	},
 	"include": [
 		"./src/**/*.ts",
 		"./src/**/*.js"
+	],
+	"exclude": [
+		"node_modules/@types/glob",
+		"node_modules/@types/shelljs"
 	]
 }
