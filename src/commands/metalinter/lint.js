@@ -30,6 +30,8 @@ class MetalinterLint extends Command {
       const icon = r.priority === 1 ? '🔴' : r.priority === 2 ? '🟡' : 'ℹ️';
       console.log(`${icon} ${r.filePath}:${r.line} ▶️ [${r.rule}] ${r.message}`);
     }
+
+    console.log('✅ Number of items raised:', results.length);
   }
 }
 
