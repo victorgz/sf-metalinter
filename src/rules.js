@@ -52,4 +52,17 @@ module.exports = {
     },
     include: ['**/*.object-meta.xml'],
   },
+  'named-credential-no-hardcoded-password': {
+    priority: 1,
+    description: 'Named Credential should not have a password explicitly set',
+    linter: function ({ file, report }) {
+      if (file.parsedXml?.get('//protocol')?.text() === 'Password') {
+        const password = file.parsedXml?.get('//password');
+        if (password) {
+          report('Named Credential has a password explicitly set', password.line());
+        }
+      }
+    },
+    include: ['**/*.namedCredential-meta.xml'],
+  },
 };
