@@ -1,3 +1,15 @@
+# [0.3.0](https://github.com/victorgz/sf-metalinter/compare/v0.2.0...v0.3.0) (2025-06-19)
+
+
+### Bug Fixes
+
+* rule for deprecated API version ([bb8191d](https://github.com/victorgz/sf-metalinter/commit/bb8191d004414a7f45def00aee79d350de19bc9b))
+
+
+### Features
+
+* new rule for harcoded passwords in named credentials ([a5602b3](https://github.com/victorgz/sf-metalinter/commit/a5602b39376eb9052bcf23f090659c938c668d47))
+
 # [0.2.0](https://github.com/victorgz/sf-metalinter/compare/v0.1.5...v0.2.0) (2025-06-18)
 
 
