@@ -11,11 +11,11 @@ module.exports = {
   },
   'deprecated-api-version': {
     priority: 2,
-    description: 'API Version is deprecated',
+    description: 'API Version is deprecated (< 30.0)',
     linter: function ({ file, report }) {
       const apiVersion = file.parsedXml?.get('//apiVersion');
-      if (apiVersion && parseFloat(apiVersion.text()) < 50.0) {
-        report('API Version is too low: ' + parseFloat(apiVersion.text()), apiVersion.line());
+      if (apiVersion && parseFloat(apiVersion.text()) < 30.0) {
+        report('API Version is deprecated: ' + parseFloat(apiVersion.text()), apiVersion.line());
       }
     },
   },
