@@ -43,6 +43,16 @@ Use custom rules file:
 sf metalinter lint --path force-app/main/default --rules ./my-custom-rules.js
 ```
 
+## 📚 Documentation
+
+For the detailed documentation, visit the [Wiki](https://github.com/victorgz/sf-metalinter/wiki):
+
+- [🚀 Getting Started](https://github.com/victorgz/sf-metalinter/wiki/1---Getting-Started) - Installation and basic usage
+- [📋 Built-in Rules](https://github.com/victorgz/sf-metalinter/wiki/2---Built-in-Rules) - Complete list of available rules
+- [🛠️ Custom Rules](https://github.com/victorgz/sf-metalinter/wiki/3---Custom-Rules) - Create your own linting rules
+- [🤝 Contributing](https://github.com/victorgz/sf-metalinter/blob/master/DEVELOPMENT.md) - How to contribute to the project
+- [❓ FAQ](https://github.com/victorgz/sf-metalinter/discussions) - Frequently asked questions
+
 ## Dependencies
 
 This plugin is built with:
