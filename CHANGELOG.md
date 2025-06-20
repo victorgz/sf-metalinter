@@ -1,3 +1,10 @@
+## [0.3.1](https://github.com/victorgz/sf-metalinter/compare/v0.3.0...v0.3.1) (2025-06-20)
+
+
+### Bug Fixes
+
+* update dependencies ([489bac1](https://github.com/victorgz/sf-metalinter/commit/489bac1fd57f1a61e4b57d58604fbe3a2e7a6d48))
+
 # [0.3.0](https://github.com/victorgz/sf-metalinter/compare/v0.2.0...v0.3.0) (2025-06-19)
 
 
