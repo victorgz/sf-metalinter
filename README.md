@@ -60,7 +60,8 @@ This plugin is built with:
 - **[@oclif/core](https://github.com/oclif/core)** - CLI framework
 - **[@salesforce/core](https://github.com/forcedotcom/sfdx-core)** - Salesforce core libraries
 - **[@salesforce/sf-plugins-core](https://github.com/salesforcecli/sf-plugins-core)** - SF plugin utilities
-- **[fast-xml-parser](https://github.com/NaturalIntelligence/fast-xml-parser)** - Fast XML parsing
+- **[@xmldom/xmldom](https://github.com/xmldom/xmldom)** - XML DOM parser
+- **[xpath](https://github.com/goto100/xpath)** - XPath query engine
 - **[glob](https://github.com/isaacs/node-glob)** - File pattern matching
 - **[minimatch](https://github.com/isaacs/minimatch)** - Pattern matching
 
