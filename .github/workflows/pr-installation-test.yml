@@ -84,3 +84,18 @@ jobs:
           cd plugin-test || true
           sf plugins uninstall sf-metalinter || true
         shell: bash
+
+  # Summary job that depends on all matrix jobs
+  installation-test-summary:
+    name: Installation Test Summary
+    runs-on: ubuntu-latest
+    needs: installation-test
+    if: always()
+    steps:
+      - name: Check all jobs passed
+        run: |
+          if [[ "${{ needs.installation-test.result }}" != "success" ]]; then
+            echo "❌ Installation tests failed"
+            exit 1
+          fi
+          echo "✅ All installation tests passed"
