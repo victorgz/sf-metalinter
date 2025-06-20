@@ -13,7 +13,8 @@ async function findMetadataFiles(baseDir, patterns = ['**/*.*-meta.xml']) {
       })
     )
   );
-  return allMatches.flat();
+  // Convert absolute paths to relative paths from current working directory
+  return allMatches.flat().map((filePath) => path.relative(process.cwd(), filePath));
 }
 
 async function parseMetadataFile(filePath) {
@@ -50,7 +51,8 @@ async function runLinterOnRepo(paths, rules) {
       const filesInDir = await findMetadataFiles(p);
       resolvedFiles.push(...filesInDir);
     } else if (stats.isFile()) {
-      resolvedFiles.push(p);
+      // Convert individual files to relative paths too
+      resolvedFiles.push(path.relative(process.cwd(), p));
     } else {
       console.warn(`⚠️ Skipping unsupported path: ${p}`);
     }
