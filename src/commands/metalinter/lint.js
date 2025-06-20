@@ -17,13 +17,14 @@ class MetalinterLint extends SfCommand {
     path: Flags.string({
       char: 'p',
       summary: 'Comma-separated list of folders/files to lint',
-      description: 'Specify the paths to Salesforce metadata files or directories to analyze.',
-      required: true,
+      description: 'Specify the paths or glob patterns to Salesforce metadata files or directories to analyze.',
+      default: 'force-app',
     }),
-    rules: Flags.string({
+    rules: Flags.file({
       char: 'r',
       summary: 'Path to custom rules file',
       description: 'Optional path to a JavaScript file containing custom linting rules.',
+      exists: true,
     }),
     format: Flags.string({
       char: 'f',
@@ -31,6 +32,14 @@ class MetalinterLint extends SfCommand {
       description: 'Format the output as JSON, table, or CSV.',
       options: ['json', 'table', 'csv'],
       default: 'json',
+    }),
+    severity: Flags.string({
+      char: 's',
+      summary: 'Severity threshold for exit code',
+      description: 'Exit with non-zero code when issues of this severity or higher are found.',
+      options: ['error', 'warning', 'info', 'none'],
+      default: 'none',
+      helpGroup: 'Behavior Options',
     }),
   };
 
@@ -48,13 +57,31 @@ class MetalinterLint extends SfCommand {
       // Print results based on format
       this.printResults(results, flags.format.toLowerCase());
 
-      // Exit with error code if issues found
+      // Exit with error code if issues found based on severity threshold
       if (results.length > 0) {
-        // this.exit(1) - commented out for now
+        const hasErrorsAtThreshold = this.shouldExitWithError(results, flags.severity);
+        if (hasErrorsAtThreshold) {
+          this.exit(1);
+        }
       }
     } catch (error) {
       this.error(error.message);
     }
+  }
+
+  shouldExitWithError(results, severityThreshold) {
+    // Define severity levels in order of importance
+    const severityLevels = {
+      info: 3,
+      warning: 2,
+      error: 1,
+      none: 0,
+    };
+
+    const thresholdPriority = severityLevels[severityThreshold];
+
+    // Check if any results have priority <= threshold (lower number = higher severity)
+    return results.some((r) => r.priority <= thresholdPriority);
   }
 
   printResults(results, format) {
