@@ -22,4 +22,4 @@ function mergeRules(baseRules, userRules) {
   return merged;
 }
 
-module.exports = mergeRules;
+export default mergeRules;

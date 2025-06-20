@@ -1,5 +1,5 @@
-const path = require('path');
-const Rule = require('../objects/Rule');
+import path from 'path';
+import Rule from '../objects/Rule.js';
 
 function loadRules(rawRules) {
   const rules = [];
@@ -11,4 +11,4 @@ function loadRules(rawRules) {
   return rules;
 }
 
-module.exports = loadRules;
+export default loadRules;

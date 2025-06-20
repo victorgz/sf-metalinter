@@ -18,4 +18,4 @@ class Linter {
   }
 }
 
-module.exports = Linter;
+export default Linter;

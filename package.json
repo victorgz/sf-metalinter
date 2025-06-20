@@ -4,6 +4,7 @@
   "description": "Salesforce Metadata Linter",
   "author": "Victor Garcia Zarco",
   "license": "BSD-3-Clause",
+  "type": "module",
   "main": "./lib/index.js",
   "exports": "./lib/index.js",
   "repository": {

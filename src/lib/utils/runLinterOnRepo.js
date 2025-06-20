@@ -1,8 +1,8 @@
-const fs = require('fs').promises;
-const path = require('path');
-const { glob } = require('glob');
-const { parseXml } = require('./xmlParser');
-const Linter = require('../objects/Linter');
+import fs from 'fs/promises';
+import path from 'path';
+import { glob } from 'glob';
+import { parseXml } from './xmlParser.js';
+import Linter from '../objects/Linter.js';
 
 async function findMetadataFiles(baseDir, patterns = ['**/*.*-meta.xml']) {
   const allMatches = await Promise.all(
@@ -68,4 +68,4 @@ async function runLinterOnRepo(paths, rules) {
   return results.flat();
 }
 
-module.exports = runLinterOnRepo;
+export default runLinterOnRepo;

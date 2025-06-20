@@ -1,4 +1,4 @@
-const { minimatch } = require('minimatch');
+import { minimatch } from 'minimatch';
 
 class Rule {
   constructor(name, definition) {
@@ -32,4 +32,4 @@ class Rule {
   }
 }
 
-module.exports = Rule;
+export default Rule;

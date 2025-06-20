@@ -1,4 +1,4 @@
-module.exports = {
+export default {
   'missing-description': {
     priority: 2,
     description: 'XML metadata is missing description',

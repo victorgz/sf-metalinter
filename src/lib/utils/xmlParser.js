@@ -1,5 +1,5 @@
-const xpath = require('xpath');
-const { DOMParser } = require('@xmldom/xmldom');
+import xpath from 'xpath';
+import { DOMParser } from '@xmldom/xmldom';
 
 // Wrapper class to provide a consistent interface for XML elements
 class XMLElement {
@@ -78,8 +78,4 @@ function parseXml(xmlString) {
   }
 }
 
-module.exports = {
-  parseXml,
-  XMLElement,
-  ParsedXMLDocument,
-};
+export { parseXml, XMLElement, ParsedXMLDocument };

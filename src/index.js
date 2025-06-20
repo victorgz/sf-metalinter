@@ -1,8 +1,8 @@
-const path = require('path');
-const runLinterOnRepo = require('./lib/utils/runLinterOnRepo.js');
-const baseRules = require('./rules.js');
-const mergeRules = require('./lib/utils/mergeRules.js');
-const loadRules = require('./lib/utils/loadRules.js');
+import path from 'path';
+import runLinterOnRepo from './lib/utils/runLinterOnRepo.js';
+import baseRules from './rules.js';
+import mergeRules from './lib/utils/mergeRules.js';
+import loadRules from './lib/utils/loadRules.js';
 
 // Main plugin entry point
 export { default as MetalinterLint } from './commands/metalinter/lint.js';
@@ -24,13 +24,8 @@ async function executeLinter(paths, customRulesPath = null) {
       // Resolve the path relative to the current working directory
       const rulesPath = path.resolve(process.cwd(), customRulesPath);
 
-      // Clear require cache to allow reloading (if already cached)
-      try {
-        delete require.cache[require.resolve(rulesPath)];
-      } catch (cacheErr) {
-        // Ignore cache errors - file might not be cached yet
-      }
-      customRules = require(rulesPath);
+      // Note: ES modules are cached by default, but don't need manual cache clearing
+      customRules = (await import(rulesPath)).default;
     } catch (err) {
       throw new Error(`Failed to load custom rules from ${customRulesPath}: ${err.message}`);
     }
@@ -46,6 +41,4 @@ async function executeLinter(paths, customRulesPath = null) {
   return results;
 }
 
-module.exports = {
-  executeLinter,
-};
+export { executeLinter };
