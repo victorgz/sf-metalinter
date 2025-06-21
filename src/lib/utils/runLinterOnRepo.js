@@ -4,6 +4,12 @@ import { glob } from 'glob';
 import { parseXml } from './xmlParser.js';
 import Linter from '../objects/Linter.js';
 
+/**
+ * Finds metadata files in a directory using glob patterns
+ * @param {string} baseDir - The base directory to search in
+ * @param {string[]} patterns - Array of glob patterns to match files
+ * @returns {Promise<string[]>} Array of relative file paths from current working directory
+ */
 async function findMetadataFiles(baseDir, patterns = ['**/*.*-meta.xml']) {
   const allMatches = await Promise.all(
     patterns.map((pattern) =>
@@ -17,6 +23,15 @@ async function findMetadataFiles(baseDir, patterns = ['**/*.*-meta.xml']) {
   return allMatches.flat().map((filePath) => path.relative(process.cwd(), filePath));
 }
 
+/**
+ * Parses a single metadata file and extracts its content and XML structure
+ * @param {string} filePath - Path to the metadata file to parse
+ * @returns {Promise<Object>} Object containing path, name, raw content, and parsed XML
+ * @returns {Promise<Object>} return.path - The file path
+ * @returns {Promise<Object>} return.name - The basename of the file
+ * @returns {Promise<Object>} return.raw - Raw file content as string
+ * @returns {Promise<Object>} return.parsedXml - Parsed XML object (null if parsing failed)
+ */
 async function parseMetadataFile(filePath) {
   const rawContent = await fs.readFile(filePath, 'utf8');
 
@@ -31,15 +46,26 @@ async function parseMetadataFile(filePath) {
     path: filePath,
     name: path.basename(filePath),
     raw: rawContent,
-    parsedXml, // ⬅️ key part!
+    parsedXml,
   };
 }
 
+/**
+ * Extracts description text from XML content using regex
+ * @param {string} content - Raw XML content to search
+ * @returns {string} Extracted description or empty string if not found
+ */
 function extractFakeDescription(content) {
   const match = content.match(/<description>(.*?)<\/description>/);
   return match ? match[1] : '';
 }
 
+/**
+ * Runs the linter on multiple file paths or directories
+ * @param {string[]} paths - Array of file paths or directory paths to lint
+ * @param {Object} rules - Linting rules configuration object
+ * @returns {Promise<Array>} Array of linting results with issues found
+ */
 async function runLinterOnRepo(paths, rules) {
   const linter = new Linter(rules);
   const resolvedFiles = [];
