@@ -1,3 +1,16 @@
+# [0.4.0](https://github.com/victorgz/sf-metalinter/compare/v0.3.1...v0.4.0) (2025-06-21)
+
+
+### Bug Fixes
+
+* full file paths are now relative paths ([74970f7](https://github.com/victorgz/sf-metalinter/commit/74970f7b45e31ec19ec2f3f798e534ec9d432d14))
+
+
+### Features
+
+* migrate plugin to ESM ([78582c4](https://github.com/victorgz/sf-metalinter/commit/78582c4efaf024e0e31a5872d21ce9665be56486))
+* new flag for exit severity threshold ([5b94ba3](https://github.com/victorgz/sf-metalinter/commit/5b94ba34117eafa5d768266d5a169193055aae6c))
+
 ## [0.3.1](https://github.com/victorgz/sf-metalinter/compare/v0.3.0...v0.3.1) (2025-06-20)
 
 
