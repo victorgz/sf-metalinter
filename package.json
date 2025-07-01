@@ -55,8 +55,8 @@
     "@semantic-release/release-notes-generator": "^11.0.7",
     "@types/glob": "^8.1.0",
     "@types/node": "^24.0.3",
+    "oclif": "^4.20.1",
     "eslint-plugin-sf-plugin": "^1.20.26",
-    "oclif": "^4.14.0",
     "semantic-release": "^21.1.2",
     "ts-node": "^10.9.2",
     "typescript": "^5.8.3"
