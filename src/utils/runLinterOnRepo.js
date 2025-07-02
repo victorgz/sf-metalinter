@@ -2,7 +2,7 @@ import fs from 'fs/promises';
 import path from 'path';
 import { glob } from 'glob';
 import { parseXml } from './xmlParser.js';
-import Linter from '../objects/Linter.js';
+import Linter from '../objects/Linter.js'; // eslint-disable-line import/order
 
 /**
  * Finds metadata files in a directory using glob patterns
@@ -51,16 +51,6 @@ async function parseMetadataFile(filePath) {
 }
 
 /**
- * Extracts description text from XML content using regex
- * @param {string} content - Raw XML content to search
- * @returns {string} Extracted description or empty string if not found
- */
-function extractFakeDescription(content) {
-  const match = content.match(/<description>(.*?)<\/description>/);
-  return match ? match[1] : '';
-}
-
-/**
  * Runs the linter on multiple file paths or directories
  * @param {string[]} paths - Array of file paths or directory paths to lint
  * @param {Object} rules - Linting rules configuration object
@@ -71,9 +61,11 @@ async function runLinterOnRepo(paths, rules) {
   const resolvedFiles = [];
 
   for (const p of paths) {
+    // eslint-disable-next-line no-await-in-loop
     const stats = await fs.stat(p);
 
     if (stats.isDirectory()) {
+      // eslint-disable-next-line no-await-in-loop
       const filesInDir = await findMetadataFiles(p);
       resolvedFiles.push(...filesInDir);
     } else if (stats.isFile()) {

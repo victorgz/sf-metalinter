@@ -1,4 +1,3 @@
-import path from 'path';
 import Rule from '../objects/Rule.js';
 
 function loadRules(rawRules) {
