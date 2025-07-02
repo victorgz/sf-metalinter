@@ -1,6 +1,7 @@
 function mergeRules(baseRules, userRules) {
   const merged = {};
 
+  // eslint-disable-next-line guard-for-in
   for (const ruleName in userRules) {
     const userRule = userRules[ruleName];
     const baseRule = baseRules[ruleName];

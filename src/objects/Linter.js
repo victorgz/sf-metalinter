@@ -11,6 +11,7 @@ class Linter {
     };
 
     for (const rule of this.rules) {
+      // eslint-disable-next-line no-await-in-loop
       await rule.run(file, report);
     }
 
