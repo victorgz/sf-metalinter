@@ -1,3 +1,12 @@
+## [0.4.1](https://github.com/victorgz/sf-metalinter/compare/v0.4.0...v0.4.1) (2025-07-02)
+
+
+### Bug Fixes
+
+* **deps:** bump @salesforce/core from 8.14.0 to 8.15.0 ([#14](https://github.com/victorgz/sf-metalinter/issues/14)) ([33eead0](https://github.com/victorgz/sf-metalinter/commit/33eead0b2c2ae998ccd7511deb13823ac5b12922))
+* **deps:** bump @salesforce/sf-plugins-core from 12.2.2 to 12.2.3 ([#13](https://github.com/victorgz/sf-metalinter/issues/13)) ([7574e0f](https://github.com/victorgz/sf-metalinter/commit/7574e0fb9c920a174bd7cebee355cc33e02b5f2e))
+* output format and project structure ([#15](https://github.com/victorgz/sf-metalinter/issues/15)) ([c2e7249](https://github.com/victorgz/sf-metalinter/commit/c2e724945461fdc87e3622c9ae6b215a52848fca))
+
 # [0.4.0](https://github.com/victorgz/sf-metalinter/compare/v0.3.1...v0.4.0) (2025-06-21)
 
 
