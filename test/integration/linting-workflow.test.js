@@ -37,7 +37,7 @@ describe('Linting Workflow Integration', () => {
       
       // For this test, we expect some linting results (based on default rules)
       // The exact number depends on what default rules are configured
-      console.log('Linting results:', results);
+  
     });
 
     it('should handle multiple files in a batch', async () => {
@@ -49,7 +49,7 @@ describe('Linting Workflow Integration', () => {
       expect(Array.isArray(results)).toBe(true);
       
       // Should process both files, even if one has issues
-      console.log('Batch linting results:', results.length);
+  
     });
 
     it('should process directories and find metadata files', async () => {
@@ -59,7 +59,7 @@ describe('Linting Workflow Integration', () => {
       expect(Array.isArray(results)).toBe(true);
       
       // Should find and process .object-meta.xml files in the directory
-      console.log('Directory linting found files:', results.length);
+  
     });
   });
 
@@ -86,7 +86,7 @@ describe('Linting Workflow Integration', () => {
       // At least one of our custom rules should trigger
       expect(hasDescriptionRule || hasNamingRule).toBe(true);
       
-      console.log('Custom rules results:', results);
+  
     });
 
     it('should handle invalid custom rules gracefully', async () => {
@@ -110,7 +110,7 @@ describe('Linting Workflow Integration', () => {
       expect(Array.isArray(results)).toBe(true);
       
       // May have fewer results due to XML parsing issues, but should not crash
-      console.log('Invalid XML results:', results);
+  
     });
 
     it('should handle non-existent files', async () => {
@@ -140,7 +140,7 @@ describe('Linting Workflow Integration', () => {
       
       // Verify that the linter actually processed the file content
       // (This test validates that XML parsing is working)
-      console.log('XML processing completed, results count:', results.length);
+  
     });
 
     it('should handle different file extensions correctly', async () => {
@@ -152,7 +152,7 @@ describe('Linting Workflow Integration', () => {
       expect(Array.isArray(results)).toBe(true);
       
       // Should process metadata XML files
-      console.log('Metadata file processing results:', results.length);
+  
     });
   });
 
@@ -166,7 +166,7 @@ describe('Linting Workflow Integration', () => {
       expect(Array.isArray(results)).toBe(true);
       
       // Should have some results from base rules
-      console.log('Base rules results:', results);
+  
     });
 
     it('should merge custom rules with base rules', async () => {
@@ -178,7 +178,7 @@ describe('Linting Workflow Integration', () => {
       expect(Array.isArray(results)).toBe(true);
       
       // Should have results from both base and custom rules
-      console.log('Merged rules results:', results);
+  
     });
   });
 
@@ -194,8 +194,6 @@ describe('Linting Workflow Integration', () => {
       
       expect(Array.isArray(results)).toBe(true);
       expect(executionTime).toBeLessThan(5000); // Should complete within 5 seconds
-      
-      console.log(`Linting completed in ${executionTime}ms`);
     });
   });
 }); 

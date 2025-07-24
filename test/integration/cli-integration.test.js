@@ -72,8 +72,7 @@ describe('CLI Integration Tests', () => {
       
       // CLI might not produce stdout output in some cases due to argument parsing issues
       // This is normal CLI behavior and doesn't indicate a failure
-      console.log('CLI output:', result.stdout || '(no stdout)');
-      console.log('CLI stderr:', result.stderr || '(no stderr)');
+      
     });
 
     it('should lint multiple files via CLI', async () => {
@@ -84,7 +83,7 @@ describe('CLI Integration Tests', () => {
       
       expect([0, 1, 2]).toContain(result.code);
       
-      console.log('CLI multi-file output:', result.stdout || '(no stdout)');
+  
     });
 
     it('should lint a directory via CLI', async () => {
@@ -92,7 +91,7 @@ describe('CLI Integration Tests', () => {
       
       expect([0, 1, 2]).toContain(result.code);
       
-      console.log('CLI directory output:', result.stdout || '(no stdout)');
+  
     });
   });
 
@@ -105,7 +104,7 @@ describe('CLI Integration Tests', () => {
       
       expect([0, 1, 2]).toContain(result.code);
       
-      console.log('CLI custom rules output:', result.stdout || '(no stdout)');
+  
     });
 
     it('should support JSON output format', async () => {
@@ -120,7 +119,7 @@ describe('CLI Integration Tests', () => {
         expect(() => JSON.parse(result.stdout)).not.toThrow();
       }
       
-      console.log('CLI JSON output:', result.stdout);
+  
     });
 
     it('should support CSV output format', async () => {
@@ -135,7 +134,7 @@ describe('CLI Integration Tests', () => {
         expect(result.stdout).toContain(',');
       }
       
-      console.log('CLI CSV output:', result.stdout);
+  
     });
   });
 
@@ -151,7 +150,7 @@ describe('CLI Integration Tests', () => {
       // Should show error message
       expect(result.stderr.length).toBeGreaterThan(0);
       
-      console.log('CLI error output:', result.stderr);
+  
     });
 
     it('should handle invalid custom rules file', async () => {
@@ -163,7 +162,7 @@ describe('CLI Integration Tests', () => {
       // Should exit with error code
       expect(result.code).not.toBe(0);
       
-      console.log('CLI invalid rules error:', result.stderr);
+  
     });
 
     it('should handle malformed XML files', async () => {
@@ -174,8 +173,7 @@ describe('CLI Integration Tests', () => {
       // May succeed or fail depending on how errors are handled
       expect([0, 1, 2]).toContain(result.code);
       
-      console.log('CLI malformed XML output:', result.stdout);
-      console.log('CLI malformed XML errors:', result.stderr);
+      
     });
   });
 
@@ -192,7 +190,7 @@ describe('CLI Integration Tests', () => {
         expect(result.stdout).toMatch(/file|error|warning|info/i);
       }
       
-      console.log('CLI readable output:', result.stdout);
+  
     });
 
     it('should include file paths in output', async () => {
@@ -207,7 +205,7 @@ describe('CLI Integration Tests', () => {
         expect(result.stdout).toContain('sample-object');
       }
       
-      console.log('CLI file reference output:', result.stdout);
+  
     });
   });
 }); 

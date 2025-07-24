@@ -18,7 +18,7 @@ describe('Output Formats Integration', () => {
     // Create a temporary directory for test files
     tempDir = await fs.mkdtemp(join(os.tmpdir(), 'metalinter-test-'));
     
-    // Mock console.log to capture output
+  
     mockConsoleLog = jest.spyOn(console, 'log').mockImplementation();
     
     // Also mock console.warn to avoid cluttering output during testing
@@ -46,7 +46,7 @@ describe('Output Formats Integration', () => {
       
       // Verify that the output contains readable information
       const output = mockConsoleLog.mock.calls.map(call => call.join(' ')).join('\n');
-      console.log('Plain text output:', output);
+  
     });
 
     it('should handle empty results gracefully', () => {
@@ -90,9 +90,7 @@ describe('Output Formats Integration', () => {
         expect(parsed).toHaveProperty('issues');
         expect(Array.isArray(parsed.issues)).toBe(true);
         
-        console.log('JSON output valid:', parsed);
-      } else {
-        console.log('No JSON found in output:', allOutput);
+        
       }
     });
 
@@ -144,7 +142,7 @@ describe('Output Formats Integration', () => {
         expect(csvOutput).toContain(',');
       }
       
-      console.log('CSV output:', csvOutput);
+  
     });
 
     it('should handle CSV escaping correctly', async () => {
@@ -167,7 +165,7 @@ describe('Output Formats Integration', () => {
 
       // Should properly escape special characters
       expect(csvOutput).toContain('"');
-      console.log('CSV escaping output:', csvOutput);
+  
     });
   });
 
@@ -187,7 +185,7 @@ describe('Output Formats Integration', () => {
       const results = await executeLinter([tempXmlFile]);
 
       expect(Array.isArray(results)).toBe(true);
-      console.log('Temporary file linting results:', results.length);
+  
     });
 
     it('should handle directory traversal', async () => {
@@ -210,7 +208,7 @@ describe('Output Formats Integration', () => {
       const results = await executeLinter([tempDir]);
 
       expect(Array.isArray(results)).toBe(true);
-      console.log('Directory traversal results:', results.length);
+  
     });
 
     it('should handle mixed file types in directory', async () => {
@@ -221,13 +219,13 @@ describe('Output Formats Integration', () => {
 
       await fs.writeFile(xmlFile, `<?xml version="1.0"?><CustomObject></CustomObject>`, 'utf8');
       await fs.writeFile(txtFile, 'This is a text file', 'utf8');
-      await fs.writeFile(jsFile, 'console.log("hello");', 'utf8');
+      await fs.writeFile(jsFile, '// JavaScript file content', 'utf8');
 
       const results = await executeLinter([tempDir]);
 
       expect(Array.isArray(results)).toBe(true);
       // Should only process the XML file
-      console.log('Mixed file types results:', results.length);
+  
     });
   });
 
@@ -256,7 +254,7 @@ describe('Output Formats Integration', () => {
       expect(Array.isArray(results)).toBe(true);
       expect(executionTime).toBeLessThan(3000); // Should complete within 3 seconds
 
-      console.log(`Multiple files (${results.length} results) processed in ${executionTime}ms`);
+  
     });
   });
 
@@ -283,7 +281,7 @@ describe('Output Formats Integration', () => {
       const results = await executeLinter([tempDir]);
 
       expect(Array.isArray(results)).toBe(true);
-      console.log('Error recovery results:', results.length);
+  
     });
   });
 
@@ -312,8 +310,7 @@ describe('Output Formats Integration', () => {
         r.message && r.message.includes('__c')
       );
 
-      console.log('Custom rules on real files:', { hasDescriptionIssue, hasNamingIssue });
-      console.log('Custom rules results:', results);
+      
     });
   });
 }); 
