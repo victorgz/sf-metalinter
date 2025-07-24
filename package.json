@@ -84,6 +84,7 @@
     "lint": "wireit",
     "postpack": "sf-clean --ignore-signing-artifacts",
     "prepack": "sf-prepack",
+    "prepare": "husky install",
     "test": "npm run lint && FORCE_COLOR=2 node --experimental-vm-modules node_modules/.bin/jest",
     "test:only": "FORCE_COLOR=2 node --experimental-vm-modules node_modules/.bin/jest",
     "test:unit": "FORCE_COLOR=2 node --experimental-vm-modules node_modules/.bin/jest --selectProjects unit",
