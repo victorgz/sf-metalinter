@@ -5,7 +5,6 @@
     "checkJs": false,
     "outDir": "lib",
     "rootDir": "src",
-    "allowJs": true,
     "skipLibCheck": true,
     "noResolve": false
   },

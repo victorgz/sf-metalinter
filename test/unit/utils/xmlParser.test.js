@@ -246,5 +246,12 @@ describe('XMLParser', () => {
 
       expect(result).toBeInstanceOf(ParsedXMLDocument);
     });
+
+    it('should throw error when XML has DOM parser errors', () => {
+      // Create XML that will produce a parsererror element in the DOM
+      const invalidXml = '<?xml version="1.0"?><root><unclosed>content</root>';
+      
+      expect(() => parseXml(invalidXml)).toThrow('XML parsing failed:');
+    });
   });
 }); 
