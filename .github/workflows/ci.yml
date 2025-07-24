@@ -3,33 +3,38 @@ name: CI
 on:
   pull_request:
     branches: [master]
+  push:
+    branches: [master]
 
 jobs:
   test:
+    name: Build, Lint & Test
     runs-on: ubuntu-latest
     steps:
-      - uses: actions/checkout@v4
+      - name: Checkout code
+        uses: actions/checkout@v4
 
-      - uses: actions/setup-node@v4
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
         with:
           node-version: '20'
-          cache: 'yarn'
+          cache: 'npm'
 
       - name: Install dependencies
-        run: yarn install --frozen-lockfile
-
-      - name: Lint & Format
-        run: |
-          yarn lint
-          yarn format --check
+        run: npm ci
 
       - name: Build
-        run: yarn build
+        run: npm run build
 
-      - name: Test
-        run: yarn test
+      - name: Lint
+        run: npm run lint
 
-  # Installation test to ensure compatibility
+      - name: Run tests with coverage
+        run: npm test
+
+  # Run installation tests after main CI passes
   installation-test:
+    name: Installation Tests
     needs: test
+    if: github.event_name == 'pull_request'
     uses: ./.github/workflows/pr-installation-test.yml

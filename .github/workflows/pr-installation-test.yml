@@ -1,8 +1,7 @@
 name: PR Installation Test
 
 on:
-  pull_request:
-    branches: [master]
+  workflow_call:
   workflow_dispatch:
 
 jobs:
