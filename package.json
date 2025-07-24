@@ -42,7 +42,7 @@
     "xpath": "^0.0.34"
   },
   "devDependencies": {
-    "@oclif/plugin-command-snapshot": "^5.1.9",
+    "@oclif/plugin-command-snapshot": "^5.3.4",
     "@salesforce/cli-plugins-testkit": "^5.3.10",
     "@salesforce/dev-scripts": "^10",
     "@semantic-release/changelog": "^6.0.3",
