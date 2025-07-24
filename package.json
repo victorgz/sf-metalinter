@@ -84,10 +84,10 @@
     "lint": "wireit",
     "postpack": "sf-clean --ignore-signing-artifacts",
     "prepack": "sf-prepack",
-    "test": "wireit",
-    "test:only": "wireit",
-    "test:unit": "wireit",
-    "test:integration": "wireit",
+    "test": "npm run lint && FORCE_COLOR=2 node --experimental-vm-modules node_modules/.bin/jest",
+    "test:only": "FORCE_COLOR=2 node --experimental-vm-modules node_modules/.bin/jest",
+    "test:unit": "FORCE_COLOR=2 node --experimental-vm-modules node_modules/.bin/jest --selectProjects unit",
+    "test:integration": "FORCE_COLOR=2 node --experimental-vm-modules node_modules/.bin/jest --selectProjects integration",
     "version": "oclif readme"
   },
   "publishConfig": {
@@ -145,7 +145,6 @@
     },
     "test": {
       "dependencies": [
-        "test:compile",
         "test:only",
         "lint"
       ]

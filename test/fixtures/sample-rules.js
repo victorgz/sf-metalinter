@@ -4,8 +4,8 @@ export default {
     priority: 'error',
     include: ['**/*.object-meta.xml'],
     linter: async ({ file, report }) => {
-      const content = file.content;
-      if (!content.includes('<description>')) {
+      const content = file.raw;
+      if (content && !content.includes('<description>')) {
         report('Object should have a description field', 1);
       }
     }
