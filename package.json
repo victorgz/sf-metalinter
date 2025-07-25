@@ -96,7 +96,7 @@
       ]
     },
     "compile": {
-      "command": "cp -r src/* lib/",
+      "command": "mkdir -p lib && cp -r src/* lib/",
       "files": [
         "src/**/*.js",
         "messages/**"
