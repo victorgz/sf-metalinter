@@ -78,6 +78,7 @@
     "postpack": "sf-clean --ignore-signing-artifacts",
     "prepack": "sf-prepack",
     "prepare": "husky install",
+    "format:check": "wireit",
     "test": "npm run lint && FORCE_COLOR=2 node --experimental-vm-modules node_modules/.bin/jest",
     "test:only": "FORCE_COLOR=2 node --experimental-vm-modules node_modules/.bin/jest",
     "test:unit": "FORCE_COLOR=2 node --experimental-vm-modules node_modules/.bin/jest --selectProjects unit",
@@ -107,6 +108,18 @@
     },
     "format": {
       "command": "prettier --write \"+(src|test|schemas)/**/*.+(js|json)|command-snapshot.json|package.json\"",
+      "files": [
+        "src/**/*.js",
+        "test/**/*.js",
+        "schemas/**/*.json",
+        "command-snapshot.json",
+        "package.json",
+        ".prettier*"
+      ],
+      "output": []
+    },
+    "format:check": {
+      "command": "prettier --check \"+(src|test|schemas)/**/*.+(js|json)|command-snapshot.json|package.json\"",
       "files": [
         "src/**/*.js",
         "test/**/*.js",
