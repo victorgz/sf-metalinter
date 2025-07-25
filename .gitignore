@@ -16,7 +16,7 @@ yarn-error.log
 *checkstyle.xml
 *unitcoverage
 .nyc_output
-coverage
+coverage/
 test_session*
 
 # generated docs
