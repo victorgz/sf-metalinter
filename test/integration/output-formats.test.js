@@ -17,10 +17,9 @@ describe('Output Formats Integration', () => {
   beforeEach(async () => {
     // Create a temporary directory for test files
     tempDir = await fs.mkdtemp(join(os.tmpdir(), 'metalinter-test-'));
-    
-  
+
     mockConsoleLog = jest.spyOn(console, 'log').mockImplementation();
-    
+
     // Also mock console.warn to avoid cluttering output during testing
     jest.spyOn(console, 'warn').mockImplementation();
   });
@@ -30,7 +29,7 @@ describe('Output Formats Integration', () => {
     if (tempDir) {
       await fs.rm(tempDir, { recursive: true, force: true });
     }
-    
+
     mockConsoleLog.mockRestore();
   });
 
@@ -43,20 +42,19 @@ describe('Output Formats Integration', () => {
       printResults(results, 'plain', console);
 
       expect(mockConsoleLog).toHaveBeenCalled();
-      
+
       // Verify that the output contains readable information
-      const output = mockConsoleLog.mock.calls.map(call => call.join(' ')).join('\n');
-  
+      const output = mockConsoleLog.mock.calls.map((call) => call.join(' ')).join('\n');
     });
 
     it('should handle empty results gracefully', () => {
       const emptyResults = [];
-      
+
       printResults(emptyResults, 'plain', console);
-      
+
       expect(mockConsoleLog).toHaveBeenCalled();
-      
-      const output = mockConsoleLog.mock.calls.map(call => call.join(' ')).join('\n');
+
+      const output = mockConsoleLog.mock.calls.map((call) => call.join(' ')).join('\n');
       expect(output).toContain('0'); // Should indicate no issues found
     });
   });
@@ -69,28 +67,24 @@ describe('Output Formats Integration', () => {
       printResults(results, 'json', console);
 
       expect(mockConsoleLog).toHaveBeenCalled();
-      
+
       // Get the JSON output and filter out non-JSON console messages
-      const allOutput = mockConsoleLog.mock.calls
-        .map(call => call.join(' '))
-        .join('\n');
+      const allOutput = mockConsoleLog.mock.calls.map((call) => call.join(' ')).join('\n');
 
       // Find the JSON part (starts with { and ends with })
       const jsonStart = allOutput.indexOf('{');
       const jsonEnd = allOutput.lastIndexOf('}') + 1;
-      
+
       if (jsonStart >= 0 && jsonEnd > jsonStart) {
         const jsonOutput = allOutput.substring(jsonStart, jsonEnd);
-        
+
         // Should be valid JSON
         expect(() => JSON.parse(jsonOutput)).not.toThrow();
-        
+
         const parsed = JSON.parse(jsonOutput);
         expect(parsed).toHaveProperty('summary');
         expect(parsed).toHaveProperty('issues');
         expect(Array.isArray(parsed.issues)).toBe(true);
-        
-        
       }
     });
 
@@ -100,18 +94,16 @@ describe('Output Formats Integration', () => {
 
       printResults(results, 'json', console);
 
-      const allOutput = mockConsoleLog.mock.calls
-        .map(call => call.join(' '))
-        .join('\n');
+      const allOutput = mockConsoleLog.mock.calls.map((call) => call.join(' ')).join('\n');
 
       // Find the JSON part
       const jsonStart = allOutput.indexOf('{');
       const jsonEnd = allOutput.lastIndexOf('}') + 1;
-      
+
       if (jsonStart >= 0 && jsonEnd > jsonStart) {
         const jsonOutput = allOutput.substring(jsonStart, jsonEnd);
         const parsed = JSON.parse(jsonOutput);
-        
+
         // Should have expected structure
         expect(parsed.summary).toHaveProperty('totalIssues');
         expect(parsed.summary).toHaveProperty('errors');
@@ -129,20 +121,16 @@ describe('Output Formats Integration', () => {
       printResults(results, 'csv', console);
 
       expect(mockConsoleLog).toHaveBeenCalled();
-      
-      const csvOutput = mockConsoleLog.mock.calls
-        .map(call => call.join(' '))
-        .join('\n');
+
+      const csvOutput = mockConsoleLog.mock.calls.map((call) => call.join(' ')).join('\n');
 
       if (csvOutput.trim()) {
         // Should contain CSV headers
         expect(csvOutput).toContain('File,Line,Severity,Rule,Message');
-        
+
         // Should use commas as separators
         expect(csvOutput).toContain(',');
       }
-      
-  
     });
 
     it('should handle CSV escaping correctly', async () => {
@@ -153,19 +141,16 @@ describe('Output Formats Integration', () => {
           line: 1,
           column: 1,
           priority: 'error',
-          message: 'Error with "quotes" and, commas'
-        }
+          message: 'Error with "quotes" and, commas',
+        },
       ];
 
       printResults(resultsWithSpecialChars, 'csv', console);
 
-      const csvOutput = mockConsoleLog.mock.calls
-        .map(call => call.join(' '))
-        .join('\n');
+      const csvOutput = mockConsoleLog.mock.calls.map((call) => call.join(' ')).join('\n');
 
       // Should properly escape special characters
       expect(csvOutput).toContain('"');
-  
     });
   });
 
@@ -185,7 +170,6 @@ describe('Output Formats Integration', () => {
       const results = await executeLinter([tempXmlFile]);
 
       expect(Array.isArray(results)).toBe(true);
-  
     });
 
     it('should handle directory traversal', async () => {
@@ -208,7 +192,6 @@ describe('Output Formats Integration', () => {
       const results = await executeLinter([tempDir]);
 
       expect(Array.isArray(results)).toBe(true);
-  
     });
 
     it('should handle mixed file types in directory', async () => {
@@ -225,7 +208,6 @@ describe('Output Formats Integration', () => {
 
       expect(Array.isArray(results)).toBe(true);
       // Should only process the XML file
-  
     });
   });
 
@@ -253,8 +235,6 @@ describe('Output Formats Integration', () => {
 
       expect(Array.isArray(results)).toBe(true);
       expect(executionTime).toBeLessThan(3000); // Should complete within 3 seconds
-
-  
     });
   });
 
@@ -281,7 +261,6 @@ describe('Output Formats Integration', () => {
       const results = await executeLinter([tempDir]);
 
       expect(Array.isArray(results)).toBe(true);
-  
     });
   });
 
@@ -297,20 +276,14 @@ describe('Output Formats Integration', () => {
       await fs.writeFile(xmlFile, xmlContent, 'utf8');
 
       const customRulesFile = join(fixturesPath, 'sample-rules.js');
-      
+
       const results = await executeLinter([xmlFile], customRulesFile);
 
       expect(Array.isArray(results)).toBe(true);
-      
-      // Should trigger our custom rules (missing description, wrong naming)
-      const hasDescriptionIssue = results.some(r => 
-        r.message && r.message.includes('description')
-      );
-      const hasNamingIssue = results.some(r => 
-        r.message && r.message.includes('__c')
-      );
 
-      
+      // Should trigger our custom rules (missing description, wrong naming)
+      const hasDescriptionIssue = results.some((r) => r.message && r.message.includes('description'));
+      const hasNamingIssue = results.some((r) => r.message && r.message.includes('__c'));
     });
   });
-}); 
+});

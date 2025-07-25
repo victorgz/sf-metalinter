@@ -11,18 +11,18 @@ describe('Linter', () => {
     mockRules = [
       {
         name: 'test-rule-1',
-        run: jest.fn().mockResolvedValue(undefined)
+        run: jest.fn().mockResolvedValue(undefined),
       },
       {
-        name: 'test-rule-2', 
-        run: jest.fn().mockResolvedValue(undefined)
-      }
+        name: 'test-rule-2',
+        run: jest.fn().mockResolvedValue(undefined),
+      },
     ];
 
     // Create mock file
     mockFile = {
       path: '/test/path/file.object-meta.xml',
-      content: '<xml>test content</xml>'
+      content: '<xml>test content</xml>',
     };
 
     linter = new Linter(mockRules);
@@ -77,16 +77,16 @@ describe('Linter', () => {
           rule: 'test-rule-1',
           message: 'Test message 1',
           filePath: file.path,
-          line: 1
+          line: 1,
         });
       });
 
       mockRules[1].run.mockImplementation(async (file, report) => {
         report({
-          rule: 'test-rule-2', 
+          rule: 'test-rule-2',
           message: 'Test message 2',
           filePath: file.path,
-          line: 2
+          line: 2,
         });
       });
 
@@ -97,13 +97,13 @@ describe('Linter', () => {
         rule: 'test-rule-1',
         message: 'Test message 1',
         filePath: '/test/path/file.object-meta.xml',
-        line: 1
+        line: 1,
       });
       expect(result[1]).toEqual({
         rule: 'test-rule-2',
-        message: 'Test message 2', 
+        message: 'Test message 2',
         filePath: '/test/path/file.object-meta.xml',
-        line: 2
+        line: 2,
       });
     });
 
@@ -115,7 +115,7 @@ describe('Linter', () => {
 
     it('should handle async rules correctly', async () => {
       mockRules[0].run.mockImplementation(async (file, report) => {
-        await new Promise(resolve => setTimeout(resolve, 10));
+        await new Promise((resolve) => setTimeout(resolve, 10));
         report({ message: 'Async message', rule: 'async-rule', filePath: file.path, line: 0 });
       });
 
@@ -126,11 +126,11 @@ describe('Linter', () => {
 
     it('should pass correct report function to each rule', async () => {
       let capturedReportFunctions = [];
-      
+
       mockRules[0].run.mockImplementation(async (file, report) => {
         capturedReportFunctions.push(report);
       });
-      
+
       mockRules[1].run.mockImplementation(async (file, report) => {
         capturedReportFunctions.push(report);
       });
@@ -149,7 +149,7 @@ describe('Linter', () => {
       });
 
       const result = await linter.runOnFile(mockFile);
-      
+
       expect(result).toHaveLength(2);
       expect(result[0].message).toBe('First message');
       expect(result[1].message).toBe('Second message');
@@ -163,26 +163,26 @@ describe('Linter', () => {
 
     it('should run rules sequentially and await each one', async () => {
       const executionOrder = [];
-      
+
       mockRules[0].run.mockImplementation(async (file, report) => {
-        await new Promise(resolve => setTimeout(resolve, 20));
+        await new Promise((resolve) => setTimeout(resolve, 20));
         executionOrder.push('rule-1');
       });
-      
+
       mockRules[1].run.mockImplementation(async (file, report) => {
-        await new Promise(resolve => setTimeout(resolve, 10));
+        await new Promise((resolve) => setTimeout(resolve, 10));
         executionOrder.push('rule-2');
       });
 
       await linter.runOnFile(mockFile);
-      
+
       expect(executionOrder).toEqual(['rule-1', 'rule-2']);
     });
 
     it('should handle empty rules array', async () => {
       const emptyLinter = new Linter([]);
       const result = await emptyLinter.runOnFile(mockFile);
-      
+
       expect(result).toEqual([]);
     });
 
@@ -197,7 +197,7 @@ describe('Linter', () => {
       });
 
       const result = await linter.runOnFile(mockFile);
-      
+
       expect(result).toHaveLength(3);
       expect(result[0].message).toBe('Rule 1 - Message 1');
       expect(result[1].message).toBe('Rule 1 - Message 2');
@@ -206,17 +206,17 @@ describe('Linter', () => {
 
     it('should pass the same file object to all rules', async () => {
       let passedFiles = [];
-      
+
       mockRules[0].run.mockImplementation(async (file) => {
         passedFiles.push(file);
       });
-      
+
       mockRules[1].run.mockImplementation(async (file) => {
         passedFiles.push(file);
       });
 
       await linter.runOnFile(mockFile);
-      
+
       expect(passedFiles[0]).toBe(mockFile);
       expect(passedFiles[1]).toBe(mockFile);
       expect(passedFiles[0]).toBe(passedFiles[1]);
@@ -232,12 +232,12 @@ describe('Linter', () => {
           line: 42,
           column: 15,
           severity: 'high',
-          metadata: { customField: 'customValue' }
+          metadata: { customField: 'customValue' },
         });
       });
 
       const result = await linter.runOnFile(mockFile);
-      
+
       expect(result).toHaveLength(1);
       expect(result[0]).toEqual({
         rule: 'complex-rule',
@@ -247,8 +247,8 @@ describe('Linter', () => {
         line: 42,
         column: 15,
         severity: 'high',
-        metadata: { customField: 'customValue' }
+        metadata: { customField: 'customValue' },
       });
     });
   });
-}); 
+});

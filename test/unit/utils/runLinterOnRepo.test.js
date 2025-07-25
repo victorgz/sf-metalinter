@@ -3,33 +3,33 @@ import { jest, describe, it, beforeEach, afterEach, expect } from '@jest/globals
 // Create mocks
 const mockParseXml = jest.fn();
 const mockLinterClass = jest.fn().mockImplementation(() => ({
-  runOnFile: jest.fn().mockResolvedValue([])
+  runOnFile: jest.fn().mockResolvedValue([]),
 }));
 const mockGlob = jest.fn();
 const mockFs = {
   stat: jest.fn(),
-  readFile: jest.fn()
+  readFile: jest.fn(),
 };
 const mockPath = {
   relative: jest.fn(),
-  basename: jest.fn()
+  basename: jest.fn(),
 };
 
 // Mock all dependencies using unstable_mockModule
 jest.unstable_mockModule('../../../src/objects/Linter.js', () => ({
-  default: mockLinterClass
+  default: mockLinterClass,
 }));
 jest.unstable_mockModule('../../../src/utils/xmlParser.js', () => ({
-  parseXml: mockParseXml
+  parseXml: mockParseXml,
 }));
 jest.unstable_mockModule('glob', () => ({
-  glob: mockGlob
+  glob: mockGlob,
 }));
 jest.unstable_mockModule('fs/promises', () => ({
-  default: mockFs
+  default: mockFs,
 }));
 jest.unstable_mockModule('path', () => ({
-  default: mockPath
+  default: mockPath,
 }));
 
 // Import after mocking
@@ -44,15 +44,12 @@ describe('runLinterOnRepo', () => {
   beforeEach(() => {
     // Mock Linter - since it's already mocked in jest.mock(), we just need to ensure it returns our mockLinter
     mockLinter = {
-      runOnFile: jest.fn().mockResolvedValue([])
+      runOnFile: jest.fn().mockResolvedValue([]),
     };
     mockLinterClass.mockImplementation(() => mockLinter);
 
     // Mock rules
-    mockRules = [
-      { name: 'test-rule-1' },
-      { name: 'test-rule-2' }
-    ];
+    mockRules = [{ name: 'test-rule-1' }, { name: 'test-rule-2' }];
 
     // Mock console methods
     mockConsoleLog = jest.spyOn(console, 'log').mockImplementation();
@@ -82,10 +79,10 @@ describe('runLinterOnRepo', () => {
     it('should process directories and find metadata files', async () => {
       const mockStats = { isDirectory: () => true, isFile: () => false };
       mockFs.stat.mockResolvedValue(mockStats);
-      
+
       mockGlob.mockResolvedValue([
         '/project/force-app/main/default/objects/Account.object-meta.xml',
-        '/project/force-app/main/default/classes/TestClass.cls-meta.xml'
+        '/project/force-app/main/default/classes/TestClass.cls-meta.xml',
       ]);
       mockFs.readFile.mockResolvedValue('<xml>content</xml>');
 
@@ -93,7 +90,7 @@ describe('runLinterOnRepo', () => {
 
       expect(mockGlob).toHaveBeenCalledWith(expect.stringMatching(/\*\*\/\*\.\*-meta\.xml$/), {
         cwd: '/project/dir',
-        absolute: true
+        absolute: true,
       });
       expect(mockFs.readFile).toHaveBeenCalledTimes(2);
     });
@@ -101,7 +98,7 @@ describe('runLinterOnRepo', () => {
     it('should process multiple directories', async () => {
       const mockStats = { isDirectory: () => true, isFile: () => false };
       mockFs.stat.mockResolvedValue(mockStats);
-      
+
       mockGlob.mockImplementation((pattern, options) => {
         if (options.cwd === '/project/dir1') {
           return Promise.resolve(['/project/dir1/file1.object-meta.xml']);
@@ -137,10 +134,7 @@ describe('runLinterOnRepo', () => {
       mockFs.stat.mockResolvedValue(mockStats);
       mockFs.readFile.mockResolvedValue('<xml>content</xml>');
 
-      await runLinterOnRepo([
-        '/project/file1.object-meta.xml',
-        '/project/file2.cls-meta.xml'
-      ], mockRules);
+      await runLinterOnRepo(['/project/file1.object-meta.xml', '/project/file2.cls-meta.xml'], mockRules);
 
       expect(mockFs.readFile).toHaveBeenCalledTimes(2);
     });
@@ -151,7 +145,7 @@ describe('runLinterOnRepo', () => {
       const mockStats = { isDirectory: () => false, isFile: () => true };
       mockFs.stat.mockResolvedValue(mockStats);
       mockFs.readFile.mockResolvedValue('<xml>valid content</xml>');
-      
+
       const mockParsedXml = { element: 'parsed' };
       mockParseXml.mockReturnValue(mockParsedXml);
 
@@ -162,7 +156,7 @@ describe('runLinterOnRepo', () => {
         path: expect.stringContaining('test.xml'),
         name: 'test.xml',
         raw: '<xml>valid content</xml>',
-        parsedXml: mockParsedXml
+        parsedXml: mockParsedXml,
       });
     });
 
@@ -170,7 +164,7 @@ describe('runLinterOnRepo', () => {
       const mockStats = { isDirectory: () => false, isFile: () => true };
       mockFs.stat.mockResolvedValue(mockStats);
       mockFs.readFile.mockResolvedValue('<invalid>xml');
-      
+
       mockParseXml.mockImplementation(() => {
         throw new Error('Invalid XML');
       });
@@ -182,7 +176,7 @@ describe('runLinterOnRepo', () => {
         path: expect.stringContaining('invalid.xml'),
         name: 'invalid.xml',
         raw: '<invalid>xml',
-        parsedXml: null
+        parsedXml: null,
       });
     });
   });
@@ -194,21 +188,14 @@ describe('runLinterOnRepo', () => {
       mockFs.readFile.mockResolvedValue('<xml>content</xml>');
 
       mockLinter.runOnFile
-        .mockResolvedValueOnce([
-          { message: 'Issue 1', line: 10, priority: 'error' }
-        ])
-        .mockResolvedValueOnce([
-          { message: 'Issue 2', line: 5, priority: 'warning' }
-        ]);
+        .mockResolvedValueOnce([{ message: 'Issue 1', line: 10, priority: 'error' }])
+        .mockResolvedValueOnce([{ message: 'Issue 2', line: 5, priority: 'warning' }]);
 
-      const result = await runLinterOnRepo([
-        '/project/file1.xml', 
-        '/project/file2.xml'
-      ], mockRules);
+      const result = await runLinterOnRepo(['/project/file1.xml', '/project/file2.xml'], mockRules);
 
       expect(result).toEqual([
         { message: 'Issue 1', line: 10, priority: 'error' },
-        { message: 'Issue 2', line: 5, priority: 'warning' }
+        { message: 'Issue 2', line: 5, priority: 'warning' },
       ]);
     });
 
@@ -220,22 +207,17 @@ describe('runLinterOnRepo', () => {
       mockLinter.runOnFile
         .mockResolvedValueOnce([
           { message: 'Error 1', priority: 'error' },
-          { message: 'Warning 1', priority: 'warning' }
+          { message: 'Warning 1', priority: 'warning' },
         ])
-        .mockResolvedValueOnce([
-          { message: 'Error 2', priority: 'error' }
-        ]);
+        .mockResolvedValueOnce([{ message: 'Error 2', priority: 'error' }]);
 
-      const result = await runLinterOnRepo([
-        '/project/file1.xml',
-        '/project/file2.xml'
-      ], mockRules);
+      const result = await runLinterOnRepo(['/project/file1.xml', '/project/file2.xml'], mockRules);
 
       expect(result).toHaveLength(3);
       expect(result).toEqual([
         { message: 'Error 1', priority: 'error' },
         { message: 'Warning 1', priority: 'warning' },
-        { message: 'Error 2', priority: 'error' }
+        { message: 'Error 2', priority: 'error' },
       ]);
     });
 
@@ -268,15 +250,13 @@ describe('runLinterOnRepo', () => {
       mockFs.stat.mockResolvedValue(mockStats);
       mockFs.readFile.mockRejectedValue(new Error('Permission denied'));
 
-      await expect(runLinterOnRepo(['/project/forbidden.xml'], mockRules))
-        .rejects.toThrow('Permission denied');
+      await expect(runLinterOnRepo(['/project/forbidden.xml'], mockRules)).rejects.toThrow('Permission denied');
     });
 
     it('should handle stat errors', async () => {
       mockFs.stat.mockRejectedValue(new Error('File not found'));
 
-      await expect(runLinterOnRepo(['/nonexistent/path'], mockRules))
-        .rejects.toThrow('File not found');
+      await expect(runLinterOnRepo(['/nonexistent/path'], mockRules)).rejects.toThrow('File not found');
     });
 
     it('should handle glob errors', async () => {
@@ -284,15 +264,14 @@ describe('runLinterOnRepo', () => {
       mockFs.stat.mockResolvedValue(mockStats);
       mockGlob.mockRejectedValue(new Error('Glob failed'));
 
-      await expect(runLinterOnRepo(['/project/dir'], mockRules))
-        .rejects.toThrow('Glob failed');
+      await expect(runLinterOnRepo(['/project/dir'], mockRules)).rejects.toThrow('Glob failed');
     });
   });
 
   describe('integration scenarios', () => {
     it('should handle mixed file and directory paths', async () => {
       mockFs.stat
-        .mockResolvedValueOnce({ isDirectory: () => true, isFile: () => false })  // directory
+        .mockResolvedValueOnce({ isDirectory: () => true, isFile: () => false }) // directory
         .mockResolvedValueOnce({ isDirectory: () => false, isFile: () => true }); // file
 
       mockGlob.mockResolvedValue(['/project/dir/found.object-meta.xml']);
@@ -300,9 +279,9 @@ describe('runLinterOnRepo', () => {
 
       const result = await runLinterOnRepo(['/project/dir', '/project/file.xml'], mockRules);
 
-      expect(mockGlob).toHaveBeenCalledWith(expect.any(String), { 
+      expect(mockGlob).toHaveBeenCalledWith(expect.any(String), {
         cwd: '/project/dir',
-        absolute: true 
+        absolute: true,
       });
       expect(mockFs.readFile).toHaveBeenCalledTimes(2);
     });
@@ -333,18 +312,14 @@ describe('runLinterOnRepo', () => {
       mockFs.readFile.mockResolvedValue('<xml>content</xml>');
 
       // Simulate async delay to test parallel processing
-      const delay = (ms) => new Promise(resolve => setTimeout(resolve, ms));
+      const delay = (ms) => new Promise((resolve) => setTimeout(resolve, ms));
       mockLinter.runOnFile.mockImplementation(async (file) => {
         await delay(10);
         return [{ file: file.name, message: 'processed' }];
       });
 
       const start = Date.now();
-      await runLinterOnRepo([
-        '/project/file1.xml',
-        '/project/file2.xml',
-        '/project/file3.xml'
-      ], mockRules);
+      await runLinterOnRepo(['/project/file1.xml', '/project/file2.xml', '/project/file3.xml'], mockRules);
       const elapsed = Date.now() - start;
 
       // Should be much faster than 30ms (3 * 10ms) if running in parallel
@@ -360,10 +335,7 @@ describe('runLinterOnRepo', () => {
 
       await runLinterOnRepo(['/project/dir'], mockRules);
 
-      expect(mockGlob).toHaveBeenCalledWith(
-        expect.stringMatching(/\*\*\/\*\.\*-meta\.xml$/),
-        expect.any(Object)
-      );
+      expect(mockGlob).toHaveBeenCalledWith(expect.stringMatching(/\*\*\/\*\.\*-meta\.xml$/), expect.any(Object));
     });
   });
-}); 
+});

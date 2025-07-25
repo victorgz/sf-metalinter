@@ -7,11 +7,11 @@ class MockXMLElement {
     this._text = textContent;
     this._line = lineNumber;
   }
-  
+
   text() {
     return this._text;
   }
-  
+
   line() {
     return this._line;
   }
@@ -22,7 +22,7 @@ class MockParsedXMLDocument {
   constructor(elements = {}) {
     this.elements = elements;
   }
-  
+
   get(xpath) {
     return this.elements[xpath] || null;
   }
@@ -30,7 +30,7 @@ class MockParsedXMLDocument {
 
 describe('Base Rules', () => {
   let mockReport;
-  
+
   beforeEach(() => {
     mockReport = jest.fn();
   });
@@ -39,11 +39,11 @@ describe('Base Rules', () => {
     it('should report when description is missing', () => {
       const rule = baseRules['missing-description'];
       const file = {
-        parsedXml: new MockParsedXMLDocument({})
+        parsedXml: new MockParsedXMLDocument({}),
       };
-      
+
       rule.linter({ file, report: mockReport });
-      
+
       expect(mockReport).toHaveBeenCalledWith('XML metadata is missing description');
     });
 
@@ -51,23 +51,23 @@ describe('Base Rules', () => {
       const rule = baseRules['missing-description'];
       const file = {
         parsedXml: new MockParsedXMLDocument({
-          '//description': new MockXMLElement('This is a description', 5)
-        })
+          '//description': new MockXMLElement('This is a description', 5),
+        }),
       };
-      
+
       rule.linter({ file, report: mockReport });
-      
+
       expect(mockReport).not.toHaveBeenCalled();
     });
 
     it('should handle null parsedXml', () => {
       const rule = baseRules['missing-description'];
       const file = {
-        parsedXml: null
+        parsedXml: null,
       };
-      
+
       rule.linter({ file, report: mockReport });
-      
+
       expect(mockReport).toHaveBeenCalledWith('XML metadata is missing description');
     });
   });
@@ -77,12 +77,12 @@ describe('Base Rules', () => {
       const rule = baseRules['deprecated-api-version'];
       const file = {
         parsedXml: new MockParsedXMLDocument({
-          '//apiVersion': new MockXMLElement('29.0', 8)
-        })
+          '//apiVersion': new MockXMLElement('29.0', 8),
+        }),
       };
-      
+
       rule.linter({ file, report: mockReport });
-      
+
       expect(mockReport).toHaveBeenCalledWith('API Version is deprecated: 29', 8);
     });
 
@@ -90,12 +90,12 @@ describe('Base Rules', () => {
       const rule = baseRules['deprecated-api-version'];
       const file = {
         parsedXml: new MockParsedXMLDocument({
-          '//apiVersion': new MockXMLElement('29.0', 3)
-        })
+          '//apiVersion': new MockXMLElement('29.0', 3),
+        }),
       };
-      
+
       rule.linter({ file, report: mockReport });
-      
+
       expect(mockReport).toHaveBeenCalledWith('API Version is deprecated: 29', 3);
     });
 
@@ -103,12 +103,12 @@ describe('Base Rules', () => {
       const rule = baseRules['deprecated-api-version'];
       const file = {
         parsedXml: new MockParsedXMLDocument({
-          '//apiVersion': new MockXMLElement('30.0', 5)
-        })
+          '//apiVersion': new MockXMLElement('30.0', 5),
+        }),
       };
-      
+
       rule.linter({ file, report: mockReport });
-      
+
       expect(mockReport).not.toHaveBeenCalled();
     });
 
@@ -116,34 +116,34 @@ describe('Base Rules', () => {
       const rule = baseRules['deprecated-api-version'];
       const file = {
         parsedXml: new MockParsedXMLDocument({
-          '//apiVersion': new MockXMLElement('58.0', 2)
-        })
+          '//apiVersion': new MockXMLElement('58.0', 2),
+        }),
       };
-      
+
       rule.linter({ file, report: mockReport });
-      
+
       expect(mockReport).not.toHaveBeenCalled();
     });
 
     it('should handle missing API version', () => {
       const rule = baseRules['deprecated-api-version'];
       const file = {
-        parsedXml: new MockParsedXMLDocument({})
+        parsedXml: new MockParsedXMLDocument({}),
       };
-      
+
       rule.linter({ file, report: mockReport });
-      
+
       expect(mockReport).not.toHaveBeenCalled();
     });
 
     it('should handle null parsedXml', () => {
       const rule = baseRules['deprecated-api-version'];
       const file = {
-        parsedXml: null
+        parsedXml: null,
       };
-      
+
       rule.linter({ file, report: mockReport });
-      
+
       expect(mockReport).not.toHaveBeenCalled();
     });
   });
@@ -153,12 +153,12 @@ describe('Base Rules', () => {
       const rule = baseRules['flow-inactive'];
       const file = {
         parsedXml: new MockParsedXMLDocument({
-          '//status': new MockXMLElement('Draft', 12)
-        })
+          '//status': new MockXMLElement('Draft', 12),
+        }),
       };
-      
+
       rule.linter({ file, report: mockReport });
-      
+
       expect(mockReport).toHaveBeenCalledWith('Flow is not active', 12);
     });
 
@@ -166,12 +166,12 @@ describe('Base Rules', () => {
       const rule = baseRules['flow-inactive'];
       const file = {
         parsedXml: new MockParsedXMLDocument({
-          '//status': new MockXMLElement('Obsolete', 7)
-        })
+          '//status': new MockXMLElement('Obsolete', 7),
+        }),
       };
-      
+
       rule.linter({ file, report: mockReport });
-      
+
       expect(mockReport).toHaveBeenCalledWith('Flow is not active', 7);
     });
 
@@ -179,23 +179,23 @@ describe('Base Rules', () => {
       const rule = baseRules['flow-inactive'];
       const file = {
         parsedXml: new MockParsedXMLDocument({
-          '//status': new MockXMLElement('Active', 5)
-        })
+          '//status': new MockXMLElement('Active', 5),
+        }),
       };
-      
+
       rule.linter({ file, report: mockReport });
-      
+
       expect(mockReport).not.toHaveBeenCalled();
     });
 
     it('should handle missing status', () => {
       const rule = baseRules['flow-inactive'];
       const file = {
-        parsedXml: new MockParsedXMLDocument({})
+        parsedXml: new MockParsedXMLDocument({}),
       };
-      
+
       rule.linter({ file, report: mockReport });
-      
+
       expect(mockReport).not.toHaveBeenCalled();
     });
 
@@ -210,12 +210,12 @@ describe('Base Rules', () => {
       const rule = baseRules['object-internal-sharing-no-readwrite'];
       const file = {
         parsedXml: new MockParsedXMLDocument({
-          '//sharingModel': new MockXMLElement('ReadWrite', 25)
-        })
+          '//sharingModel': new MockXMLElement('ReadWrite', 25),
+        }),
       };
-      
+
       rule.linter({ file, report: mockReport });
-      
+
       expect(mockReport).toHaveBeenCalledWith('Object internal sharing is Public ReadWrite', 25);
     });
 
@@ -223,12 +223,12 @@ describe('Base Rules', () => {
       const rule = baseRules['object-internal-sharing-no-readwrite'];
       const file = {
         parsedXml: new MockParsedXMLDocument({
-          '//sharingModel': new MockXMLElement('Private', 20)
-        })
+          '//sharingModel': new MockXMLElement('Private', 20),
+        }),
       };
-      
+
       rule.linter({ file, report: mockReport });
-      
+
       expect(mockReport).not.toHaveBeenCalled();
     });
 
@@ -236,23 +236,23 @@ describe('Base Rules', () => {
       const rule = baseRules['object-internal-sharing-no-readwrite'];
       const file = {
         parsedXml: new MockParsedXMLDocument({
-          '//sharingModel': new MockXMLElement('Read', 18)
-        })
+          '//sharingModel': new MockXMLElement('Read', 18),
+        }),
       };
-      
+
       rule.linter({ file, report: mockReport });
-      
+
       expect(mockReport).not.toHaveBeenCalled();
     });
 
     it('should handle missing sharing model', () => {
       const rule = baseRules['object-internal-sharing-no-readwrite'];
       const file = {
-        parsedXml: new MockParsedXMLDocument({})
+        parsedXml: new MockParsedXMLDocument({}),
       };
-      
+
       rule.linter({ file, report: mockReport });
-      
+
       expect(mockReport).not.toHaveBeenCalled();
     });
 
@@ -267,12 +267,12 @@ describe('Base Rules', () => {
       const rule = baseRules['object-external-sharing-no-readwrite'];
       const file = {
         parsedXml: new MockParsedXMLDocument({
-          '//externalSharingModel': new MockXMLElement('ReadWrite', 30)
-        })
+          '//externalSharingModel': new MockXMLElement('ReadWrite', 30),
+        }),
       };
-      
+
       rule.linter({ file, report: mockReport });
-      
+
       expect(mockReport).toHaveBeenCalledWith('Object external sharing is Public Read/Write', 30);
     });
 
@@ -280,23 +280,23 @@ describe('Base Rules', () => {
       const rule = baseRules['object-external-sharing-no-readwrite'];
       const file = {
         parsedXml: new MockParsedXMLDocument({
-          '//externalSharingModel': new MockXMLElement('Private', 28)
-        })
+          '//externalSharingModel': new MockXMLElement('Private', 28),
+        }),
       };
-      
+
       rule.linter({ file, report: mockReport });
-      
+
       expect(mockReport).not.toHaveBeenCalled();
     });
 
     it('should handle missing external sharing model', () => {
       const rule = baseRules['object-external-sharing-no-readwrite'];
       const file = {
-        parsedXml: new MockParsedXMLDocument({})
+        parsedXml: new MockParsedXMLDocument({}),
       };
-      
+
       rule.linter({ file, report: mockReport });
-      
+
       expect(mockReport).not.toHaveBeenCalled();
     });
 
@@ -317,12 +317,12 @@ describe('Base Rules', () => {
       const file = {
         parsedXml: new MockParsedXMLDocument({
           '//protocol': new MockXMLElement('Password', 10),
-          '//password': new MockXMLElement('mypassword123', 15)
-        })
+          '//password': new MockXMLElement('mypassword123', 15),
+        }),
       };
-      
+
       rule.linter({ file, report: mockReport });
-      
+
       expect(mockReport).toHaveBeenCalledWith('Named Credential has a password explicitly set', 15);
     });
 
@@ -331,12 +331,12 @@ describe('Base Rules', () => {
       const file = {
         parsedXml: new MockParsedXMLDocument({
           '//protocol': new MockXMLElement('OAuth', 10),
-          '//password': new MockXMLElement('somevalue', 15)
-        })
+          '//password': new MockXMLElement('somevalue', 15),
+        }),
       };
-      
+
       rule.linter({ file, report: mockReport });
-      
+
       expect(mockReport).not.toHaveBeenCalled();
     });
 
@@ -344,12 +344,12 @@ describe('Base Rules', () => {
       const rule = baseRules['named-credential-no-hardcoded-password'];
       const file = {
         parsedXml: new MockParsedXMLDocument({
-          '//protocol': new MockXMLElement('Password', 10)
-        })
+          '//protocol': new MockXMLElement('Password', 10),
+        }),
       };
-      
+
       rule.linter({ file, report: mockReport });
-      
+
       expect(mockReport).not.toHaveBeenCalled();
     });
 
@@ -357,12 +357,12 @@ describe('Base Rules', () => {
       const rule = baseRules['named-credential-no-hardcoded-password'];
       const file = {
         parsedXml: new MockParsedXMLDocument({
-          '//password': new MockXMLElement('somepassword', 12)
-        })
+          '//password': new MockXMLElement('somepassword', 12),
+        }),
       };
-      
+
       rule.linter({ file, report: mockReport });
-      
+
       expect(mockReport).not.toHaveBeenCalled();
     });
 
@@ -381,14 +381,14 @@ describe('Base Rules', () => {
     it('should have all expected rules', () => {
       const expectedRules = [
         'missing-description',
-        'deprecated-api-version', 
+        'deprecated-api-version',
         'flow-inactive',
         'object-internal-sharing-no-readwrite',
         'object-external-sharing-no-readwrite',
-        'named-credential-no-hardcoded-password'
+        'named-credential-no-hardcoded-password',
       ];
-      
-      expectedRules.forEach(ruleName => {
+
+      expectedRules.forEach((ruleName) => {
         expect(baseRules).toHaveProperty(ruleName);
         expect(baseRules[ruleName]).toHaveProperty('linter');
         expect(typeof baseRules[ruleName].linter).toBe('function');
@@ -396,20 +396,20 @@ describe('Base Rules', () => {
     });
 
     it('should have proper rule structure', () => {
-      Object.keys(baseRules).forEach(ruleName => {
+      Object.keys(baseRules).forEach((ruleName) => {
         const rule = baseRules[ruleName];
         expect(rule).toHaveProperty('linter');
         expect(typeof rule.linter).toBe('function');
-        
+
         if (rule.priority !== undefined) {
           expect(typeof rule.priority).toBe('number');
           expect(rule.priority).toBeGreaterThan(0);
         }
-        
+
         if (rule.include !== undefined) {
           expect(Array.isArray(rule.include)).toBe(true);
         }
-        
+
         if (rule.description !== undefined) {
           expect(typeof rule.description).toBe('string');
           expect(rule.description.length).toBeGreaterThan(0);
@@ -417,4 +417,4 @@ describe('Base Rules', () => {
       });
     });
   });
-}); 
+});
