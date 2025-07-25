@@ -25,6 +25,8 @@ jobs:
           registry-url: 'https://registry.npmjs.org'
 
       - name: Install dependencies
+        env:
+          HUSKY: 0  # Disable husky hooks during dependency installation
         run: yarn install --frozen-lockfile
 
       - name: Build
@@ -34,4 +36,5 @@ jobs:
         env:
           GITHUB_TOKEN: ${{ secrets.PERSONAL_ACCESS_TOKEN }}
           NODE_AUTH_TOKEN: ${{ secrets.NPM_TOKEN }}
+          HUSKY: 0  # Disable husky hooks during automated release
         run: npx semantic-release
