@@ -7,7 +7,7 @@ describe('Printer', () => {
 
   beforeEach(() => {
     mockLogger = {
-      log: jest.fn()
+      log: jest.fn(),
     };
 
     sampleResults = [
@@ -16,22 +16,22 @@ describe('Printer', () => {
         line: 10,
         rule: 'test-rule-1',
         message: 'Error message 1',
-        priority: 1 // ERROR
+        priority: 1, // ERROR
       },
       {
         filePath: '/path/to/file2.xml',
         line: 25,
         rule: 'test-rule-2',
         message: 'Warning message 2',
-        priority: 2 // WARNING
+        priority: 2, // WARNING
       },
       {
         filePath: '/path/to/file3.xml',
         line: 5,
         rule: 'test-rule-3',
         message: 'Info message 3',
-        priority: 3 // INFO
-      }
+        priority: 3, // INFO
+      },
     ];
   });
 
@@ -94,8 +94,8 @@ describe('Printer', () => {
           line: 1,
           rule: 'test-rule',
           message: 'Test message',
-          priority: 999
-        }
+          priority: 999,
+        },
       ];
 
       printPlainResults(resultsWithUnknownPriority, mockLogger);
@@ -141,7 +141,7 @@ describe('Printer', () => {
         rule: 'test-rule-1',
         message: 'Error message 1',
         priority: 1,
-        severity: 'error'
+        severity: 'error',
       });
       expect(parsedOutput.issues[1]).toEqual({
         file: '/path/to/file2.xml',
@@ -149,7 +149,7 @@ describe('Printer', () => {
         rule: 'test-rule-2',
         message: 'Warning message 2',
         priority: 2,
-        severity: 'warning'
+        severity: 'warning',
       });
       expect(parsedOutput.issues[2]).toEqual({
         file: '/path/to/file3.xml',
@@ -157,7 +157,7 @@ describe('Printer', () => {
         rule: 'test-rule-3',
         message: 'Info message 3',
         priority: 3,
-        severity: 'info'
+        severity: 'info',
       });
     });
 
@@ -175,13 +175,15 @@ describe('Printer', () => {
     });
 
     it('should handle unknown priority in severity mapping', () => {
-      const resultsWithUnknownPriority = [{
-        filePath: '/path/to/file.xml',
-        line: 1,
-        rule: 'test-rule',
-        message: 'Test message',
-        priority: 999
-      }];
+      const resultsWithUnknownPriority = [
+        {
+          filePath: '/path/to/file.xml',
+          line: 1,
+          rule: 'test-rule',
+          message: 'Test message',
+          priority: 999,
+        },
+      ];
 
       printJsonResults(resultsWithUnknownPriority, mockLogger);
 
@@ -195,7 +197,7 @@ describe('Printer', () => {
       printJsonResults(sampleResults, mockLogger);
 
       const loggedOutput = mockLogger.log.mock.calls[0][0];
-      
+
       // Should contain proper JSON formatting with indentation
       expect(loggedOutput).toContain('{\n  "summary"');
       expect(loggedOutput).toContain('  "totalIssues"');
@@ -221,56 +223,70 @@ describe('Printer', () => {
     });
 
     it('should escape CSV fields with commas', () => {
-      const resultsWithCommas = [{
-        filePath: '/path/to/file,with,commas.xml',
-        line: 1,
-        rule: 'test,rule',
-        message: 'Message with, commas',
-        priority: 1
-      }];
+      const resultsWithCommas = [
+        {
+          filePath: '/path/to/file,with,commas.xml',
+          line: 1,
+          rule: 'test,rule',
+          message: 'Message with, commas',
+          priority: 1,
+        },
+      ];
 
       printCsvResults(resultsWithCommas, mockLogger);
 
       expect(mockLogger.log).toHaveBeenCalledWith('File,Line,Severity,Rule,Message');
-      expect(mockLogger.log).toHaveBeenCalledWith('"/path/to/file,with,commas.xml",1,ERROR,"test,rule","Message with, commas"');
+      expect(mockLogger.log).toHaveBeenCalledWith(
+        '"/path/to/file,with,commas.xml",1,ERROR,"test,rule","Message with, commas"'
+      );
     });
 
     it('should escape CSV fields with quotes', () => {
-      const resultsWithQuotes = [{
-        filePath: '/path/to/file"with"quotes.xml',
-        line: 1,
-        rule: 'test"rule',
-        message: 'Message with "quotes"',
-        priority: 2
-      }];
+      const resultsWithQuotes = [
+        {
+          filePath: '/path/to/file"with"quotes.xml',
+          line: 1,
+          rule: 'test"rule',
+          message: 'Message with "quotes"',
+          priority: 2,
+        },
+      ];
 
       printCsvResults(resultsWithQuotes, mockLogger);
 
-      expect(mockLogger.log).toHaveBeenCalledWith('"/path/to/file""with""quotes.xml",1,WARNING,"test""rule","Message with ""quotes"""');
+      expect(mockLogger.log).toHaveBeenCalledWith(
+        '"/path/to/file""with""quotes.xml",1,WARNING,"test""rule","Message with ""quotes"""'
+      );
     });
 
     it('should escape CSV fields with newlines', () => {
-      const resultsWithNewlines = [{
-        filePath: '/path/to/file\nwith\nnewlines.xml',
-        line: 1,
-        rule: 'test\nrule',
-        message: 'Message with\nnewlines',
-        priority: 3
-      }];
+      const resultsWithNewlines = [
+        {
+          filePath: '/path/to/file\nwith\nnewlines.xml',
+          line: 1,
+          rule: 'test\nrule',
+          message: 'Message with\nnewlines',
+          priority: 3,
+        },
+      ];
 
       printCsvResults(resultsWithNewlines, mockLogger);
 
-      expect(mockLogger.log).toHaveBeenCalledWith('"/path/to/file\nwith\nnewlines.xml",1,INFO,"test\nrule","Message with\nnewlines"');
+      expect(mockLogger.log).toHaveBeenCalledWith(
+        '"/path/to/file\nwith\nnewlines.xml",1,INFO,"test\nrule","Message with\nnewlines"'
+      );
     });
 
     it('should handle numeric values correctly', () => {
-      const resultsWithNumbers = [{
-        filePath: 123,
-        line: 456,
-        rule: 789,
-        message: 101112,
-        priority: 1
-      }];
+      const resultsWithNumbers = [
+        {
+          filePath: 123,
+          line: 456,
+          rule: 789,
+          message: 101112,
+          priority: 1,
+        },
+      ];
 
       printCsvResults(resultsWithNumbers, mockLogger);
 
@@ -278,13 +294,15 @@ describe('Printer', () => {
     });
 
     it('should handle unknown priority in severity mapping', () => {
-      const resultsWithUnknownPriority = [{
-        filePath: '/path/to/file.xml',
-        line: 1,
-        rule: 'test-rule',
-        message: 'Test message',
-        priority: 999
-      }];
+      const resultsWithUnknownPriority = [
+        {
+          filePath: '/path/to/file.xml',
+          line: 1,
+          rule: 'test-rule',
+          message: 'Test message',
+          priority: 999,
+        },
+      ];
 
       printCsvResults(resultsWithUnknownPriority, mockLogger);
 
@@ -299,4 +317,4 @@ describe('Printer', () => {
       expect(mockLogger.log).toHaveBeenCalledTimes(2);
     });
   });
-}); 
+});

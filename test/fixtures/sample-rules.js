@@ -8,9 +8,9 @@ export default {
       if (content && !content.includes('<description>')) {
         report('Object should have a description field', 1);
       }
-    }
+    },
   },
-  
+
   'test-rule-naming-convention': {
     priority: 'warning',
     include: ['**/*.object-meta.xml'],
@@ -19,6 +19,6 @@ export default {
       if (!fileName.endsWith('__c.object-meta.xml')) {
         report('Custom objects should end with __c', 1);
       }
-    }
-  }
-}; 
+    },
+  },
+};

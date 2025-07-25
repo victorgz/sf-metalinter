@@ -11,25 +11,25 @@ describe('mergeRules', () => {
         priority: 'error',
         linter: jest.fn(),
         description: 'Base rule 1 description',
-        include: ['**/*.xml']
+        include: ['**/*.xml'],
       },
       'base-rule-2': {
         priority: 'warning',
         linter: jest.fn(),
         description: 'Base rule 2 description',
-        exclude: ['**/temp/**']
-      }
+        exclude: ['**/temp/**'],
+      },
     };
 
     userRules = {
       'base-rule-1': {
-        priority: 'warning' // Override priority only
+        priority: 'warning', // Override priority only
       },
       'user-rule-1': {
         priority: 'error',
         linter: jest.fn(),
-        include: ['**/*.cls']
-      }
+        include: ['**/*.cls'],
+      },
     };
   });
 
@@ -61,8 +61,8 @@ describe('mergeRules', () => {
         priority: 'info',
         include: ['**/*.trigger'],
         exclude: ['**/custom/**'],
-        customProperty: 'custom value'
-      }
+        customProperty: 'custom value',
+      },
     };
 
     const result = mergeRules(baseRules, userRulesWithOverrides);
@@ -73,7 +73,7 @@ describe('mergeRules', () => {
       description: 'Base rule 1 description', // Preserved
       include: ['**/*.trigger'], // Overridden
       exclude: ['**/custom/**'], // Added
-      customProperty: 'custom value' // Added
+      customProperty: 'custom value', // Added
     });
   });
 
@@ -83,7 +83,7 @@ describe('mergeRules', () => {
     expect(result['user-rule-1']).toEqual({
       priority: 'error',
       linter: userRules['user-rule-1'].linter,
-      include: ['**/*.cls']
+      include: ['**/*.cls'],
     });
   });
 
@@ -123,13 +123,13 @@ describe('mergeRules', () => {
         description: 'Rule A description',
         include: ['**/*.xml'],
         exclude: ['**/temp/**'],
-        metadata: { version: '1.0' }
+        metadata: { version: '1.0' },
       },
       'rule-b': {
         priority: 'warning',
         linter: jest.fn(),
-        description: 'Rule B description'
-      }
+        description: 'Rule B description',
+      },
     };
 
     const complexUserRules = {
@@ -137,13 +137,13 @@ describe('mergeRules', () => {
         priority: 'warning',
         exclude: ['**/custom/**'],
         metadata: { version: '2.0', author: 'user' },
-        newProperty: 'new value'
+        newProperty: 'new value',
       },
       'rule-c': {
         priority: 'info',
         linter: jest.fn(),
-        include: ['**/*.cls']
-      }
+        include: ['**/*.cls'],
+      },
     };
 
     const result = mergeRules(complexBaseRules, complexUserRules);
@@ -155,7 +155,7 @@ describe('mergeRules', () => {
       include: ['**/*.xml'], // From base
       exclude: ['**/custom/**'], // Overridden
       metadata: { version: '2.0', author: 'user' }, // Overridden
-      newProperty: 'new value' // Added
+      newProperty: 'new value', // Added
     });
 
     expect(result['rule-c']).toEqual(complexUserRules['rule-c']);
@@ -167,8 +167,8 @@ describe('mergeRules', () => {
       'base-rule-1': {
         priority: null,
         include: undefined,
-        exclude: null
-      }
+        exclude: null,
+      },
     };
 
     const result = mergeRules(baseRules, userRulesWithNulls);
@@ -178,7 +178,7 @@ describe('mergeRules', () => {
       linter: baseRules['base-rule-1'].linter, // Preserved
       description: 'Base rule 1 description', // Preserved
       include: undefined, // Overridden with undefined
-      exclude: null // Added as null
+      exclude: null, // Added as null
     });
   });
-}); 
+});

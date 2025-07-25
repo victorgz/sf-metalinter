@@ -8,7 +8,7 @@ describe('XMLParser', () => {
     beforeEach(() => {
       mockDomNode = {
         textContent: '  Sample text content  ',
-        lineNumber: 42
+        lineNumber: 42,
       };
     });
 
@@ -59,7 +59,7 @@ describe('XMLParser', () => {
     beforeEach(() => {
       mockXmlDoc = {};
       mockXPath = {
-        select: jest.fn()
+        select: jest.fn(),
       };
     });
 
@@ -71,15 +71,15 @@ describe('XMLParser', () => {
     it('should return XMLElement for successful XPath query', async () => {
       // Since mocking xpath module is complex in ES modules, we'll test the interface
       const mockNode = { textContent: 'test' };
-      
+
       const doc = new ParsedXMLDocument(mockXmlDoc);
-      
+
       // Test that the method exists and can be called
       expect(typeof doc.get).toBe('function');
-      
+
       // For now, we'll test that it handles the call gracefully
       const result = doc.get('//test');
-      
+
       // The actual xpath functionality is tested in integration tests
       // Here we just verify the method signature and error handling
       expect(result).toBeNull(); // Expected since mockXmlDoc doesn't have real xpath
@@ -199,7 +199,7 @@ describe('XMLParser', () => {
       const result = parseXml(complexXml);
 
       expect(result).toBeInstanceOf(ParsedXMLDocument);
-      
+
       // Test that we can query the parsed structure
       const labelElement = result.get('//label');
       expect(labelElement).not.toBeNull();
@@ -250,8 +250,8 @@ describe('XMLParser', () => {
     it('should throw error when XML has DOM parser errors', () => {
       // Create XML that will produce a parsererror element in the DOM
       const invalidXml = '<?xml version="1.0"?><root><unclosed>content</root>';
-      
+
       expect(() => parseXml(invalidXml)).toThrow('XML parsing failed:');
     });
   });
-}); 
+});

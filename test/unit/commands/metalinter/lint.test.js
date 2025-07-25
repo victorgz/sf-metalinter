@@ -6,11 +6,11 @@ const mockPrintResults = jest.fn();
 
 // Mock the modules
 jest.unstable_mockModule('../../../../src/index.js', () => ({
-  executeLinter: mockExecuteLinter
+  executeLinter: mockExecuteLinter,
 }));
 
 jest.unstable_mockModule('../../../../src/utils/printer.js', () => ({
-  printResults: mockPrintResults
+  printResults: mockPrintResults,
 }));
 
 // Import after mocking
@@ -30,9 +30,9 @@ describe('MetalinterLint Command', () => {
     it('should return true when error severity threshold is met', () => {
       const results = [
         { priority: 1, message: 'Error issue' },
-        { priority: 2, message: 'Warning issue' }
+        { priority: 2, message: 'Warning issue' },
       ];
-      
+
       const shouldExit = MetalinterLint.prototype.shouldExitWithError(results, 'error');
       expect(shouldExit).toBe(true);
     });
@@ -40,18 +40,16 @@ describe('MetalinterLint Command', () => {
     it('should return true when warning severity threshold is met', () => {
       const results = [
         { priority: 2, message: 'Warning issue' },
-        { priority: 3, message: 'Info issue' }
+        { priority: 3, message: 'Info issue' },
       ];
-      
+
       const shouldExit = MetalinterLint.prototype.shouldExitWithError(results, 'warning');
       expect(shouldExit).toBe(true);
     });
 
     it('should return true when info severity threshold is met', () => {
-      const results = [
-        { priority: 3, message: 'Info issue' }
-      ];
-      
+      const results = [{ priority: 3, message: 'Info issue' }];
+
       const shouldExit = MetalinterLint.prototype.shouldExitWithError(results, 'info');
       expect(shouldExit).toBe(true);
     });
@@ -59,9 +57,9 @@ describe('MetalinterLint Command', () => {
     it('should return false when severity threshold is not met', () => {
       const results = [
         { priority: 2, message: 'Warning issue' },
-        { priority: 3, message: 'Info issue' }
+        { priority: 3, message: 'Info issue' },
       ];
-      
+
       const shouldExit = MetalinterLint.prototype.shouldExitWithError(results, 'error');
       expect(shouldExit).toBe(false);
     });
@@ -70,9 +68,9 @@ describe('MetalinterLint Command', () => {
       const results = [
         { priority: 1, message: 'Error issue' },
         { priority: 2, message: 'Warning issue' },
-        { priority: 3, message: 'Info issue' }
+        { priority: 3, message: 'Info issue' },
       ];
-      
+
       const shouldExit = MetalinterLint.prototype.shouldExitWithError(results, 'none');
       expect(shouldExit).toBe(false);
     });
@@ -86,23 +84,21 @@ describe('MetalinterLint Command', () => {
       const results = [
         { priority: 3, message: 'Info issue' },
         { priority: 1, message: 'Error issue' },
-        { priority: 2, message: 'Warning issue' }
+        { priority: 2, message: 'Warning issue' },
       ];
-      
+
       const shouldExitError = MetalinterLint.prototype.shouldExitWithError(results, 'error');
       const shouldExitWarning = MetalinterLint.prototype.shouldExitWithError(results, 'warning');
       const shouldExitInfo = MetalinterLint.prototype.shouldExitWithError(results, 'info');
-      
+
       expect(shouldExitError).toBe(true);
       expect(shouldExitWarning).toBe(true);
       expect(shouldExitInfo).toBe(true);
     });
 
     it('should handle edge case priority values', () => {
-      const results = [
-        { priority: 1, message: 'Error priority 1' }
-      ];
-      
+      const results = [{ priority: 1, message: 'Error priority 1' }];
+
       // Test boundary conditions
       expect(MetalinterLint.prototype.shouldExitWithError(results, 'error')).toBe(true);
       expect(MetalinterLint.prototype.shouldExitWithError(results, 'warning')).toBe(true);
@@ -114,7 +110,9 @@ describe('MetalinterLint Command', () => {
   describe('command configuration', () => {
     it('should have correct static properties', () => {
       expect(MetalinterLint.summary).toBe('Lint Salesforce metadata files');
-      expect(MetalinterLint.description).toBe('Analyze Salesforce metadata files for potential issues and best practices violations.');
+      expect(MetalinterLint.description).toBe(
+        'Analyze Salesforce metadata files for potential issues and best practices violations.'
+      );
       expect(Array.isArray(MetalinterLint.examples)).toBe(true);
       expect(MetalinterLint.examples.length).toBeGreaterThan(0);
     });
@@ -124,7 +122,7 @@ describe('MetalinterLint Command', () => {
       expect(MetalinterLint.flags).toHaveProperty('rules');
       expect(MetalinterLint.flags).toHaveProperty('format');
       expect(MetalinterLint.flags).toHaveProperty('severity');
-      
+
       expect(MetalinterLint.flags.path.default).toBe('force-app');
       expect(MetalinterLint.flags.severity.default).toBe('none');
       expect(MetalinterLint.flags.format.options).toEqual(['json', 'csv']);
@@ -143,7 +141,7 @@ describe('MetalinterLint Command', () => {
   describe('severity level mapping', () => {
     it('should have correct severity level hierarchy', () => {
       const results = [{ priority: 1, message: 'test' }];
-      
+
       // Error (priority 1) should trigger exit for all severities except none
       expect(MetalinterLint.prototype.shouldExitWithError(results, 'error')).toBe(true);
       expect(MetalinterLint.prototype.shouldExitWithError(results, 'warning')).toBe(true);
@@ -153,7 +151,7 @@ describe('MetalinterLint Command', () => {
 
     it('should respect warning threshold', () => {
       const results = [{ priority: 2, message: 'test' }];
-      
+
       // Warning (priority 2) should trigger exit for warning and info, but not error
       expect(MetalinterLint.prototype.shouldExitWithError(results, 'error')).toBe(false);
       expect(MetalinterLint.prototype.shouldExitWithError(results, 'warning')).toBe(true);
@@ -163,7 +161,7 @@ describe('MetalinterLint Command', () => {
 
     it('should respect info threshold', () => {
       const results = [{ priority: 3, message: 'test' }];
-      
+
       // Info (priority 3) should only trigger exit for info threshold
       expect(MetalinterLint.prototype.shouldExitWithError(results, 'error')).toBe(false);
       expect(MetalinterLint.prototype.shouldExitWithError(results, 'warning')).toBe(false);
@@ -171,4 +169,4 @@ describe('MetalinterLint Command', () => {
       expect(MetalinterLint.prototype.shouldExitWithError(results, 'none')).toBe(false);
     });
   });
-}); 
+});
