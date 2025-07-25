@@ -1,4 +1,11 @@
 #!/bin/sh
 . "$(dirname "$0")/_/husky.sh"
 
+# Run prettier to format code
+npm run format
+
+# Add any formatting changes to the commit
+git add .
+
+# Run linting after formatting
 npm run lint
