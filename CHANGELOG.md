@@ -1,3 +1,10 @@
+## [0.4.2](https://github.com/victorgz/sf-metalinter/compare/v0.4.1...v0.4.2) (2025-07-25)
+
+
+### Bug Fixes
+
+* **deps:** bump @salesforce/sf-plugins-core from 12.2.2 to 12.2.3 ([#21](https://github.com/victorgz/sf-metalinter/issues/21)) ([a17c516](https://github.com/victorgz/sf-metalinter/commit/a17c5162001535db8a72c2e86407288a0cdf5bb5))
+
 ## [0.4.1](https://github.com/victorgz/sf-metalinter/compare/v0.4.0...v0.4.1) (2025-07-02)
 
 
