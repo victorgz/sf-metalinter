@@ -1,3 +1,10 @@
+# [0.5.0](https://github.com/victorgz/sf-metalinter/compare/v0.4.2...v0.5.0) (2025-09-26)
+
+
+### Features
+
+* add flow rules for get all fields and copy elements ([#57](https://github.com/victorgz/sf-metalinter/issues/57)) ([263f690](https://github.com/victorgz/sf-metalinter/commit/263f690e8e2427b5220bfa19e9c347f752e84de1))
+
 ## [0.4.2](https://github.com/victorgz/sf-metalinter/compare/v0.4.1...v0.4.2) (2025-07-25)
 
 
