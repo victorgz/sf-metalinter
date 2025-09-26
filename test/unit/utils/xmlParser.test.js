@@ -7,14 +7,14 @@ describe('XMLParser', () => {
 
     beforeEach(() => {
       mockDomNode = {
-        textContent: '  Sample text content  ',
-        lineNumber: 42,
+        text: () => '  Sample text content  ',
+        line: () => 42,
       };
     });
 
-    it('should create XMLElement with dom node', () => {
+    it('should create XMLElement with libxml node', () => {
       const element = new XMLElement(mockDomNode);
-      expect(element.domNode).toBe(mockDomNode);
+      expect(element.libxmlNode).toBe(mockDomNode);
     });
 
     it('should return trimmed text content', () => {
@@ -23,7 +23,7 @@ describe('XMLParser', () => {
     });
 
     it('should handle empty text content', () => {
-      mockDomNode.textContent = '';
+      mockDomNode.text = () => '';
       const element = new XMLElement(mockDomNode);
       expect(element.text()).toBe('');
     });
@@ -34,8 +34,7 @@ describe('XMLParser', () => {
     });
 
     it('should handle undefined text content', () => {
-      mockDomNode.textContent = undefined;
-      mockDomNode.nodeValue = '  node value  ';
+      mockDomNode.text = () => '  node value  ';
       const element = new XMLElement(mockDomNode);
       expect(element.text()).toBe('node value');
     });
@@ -46,7 +45,7 @@ describe('XMLParser', () => {
     });
 
     it('should handle missing line number', () => {
-      mockDomNode.lineNumber = undefined;
+      mockDomNode.line = () => undefined;
       const element = new XMLElement(mockDomNode);
       expect(element.line()).toBeUndefined();
     });
@@ -57,9 +56,8 @@ describe('XMLParser', () => {
     let mockXPath;
 
     beforeEach(() => {
-      mockXmlDoc = {};
-      mockXPath = {
-        select: jest.fn(),
+      mockXmlDoc = {
+        find: jest.fn(),
       };
     });
 
@@ -69,36 +67,38 @@ describe('XMLParser', () => {
     });
 
     it('should return XMLElement for successful XPath query', async () => {
-      // Since mocking xpath module is complex in ES modules, we'll test the interface
-      const mockNode = { textContent: 'test' };
+      const mockNode = { text: () => 'test', line: () => 1 };
+      mockXmlDoc.find.mockReturnValue([mockNode]);
 
       const doc = new ParsedXMLDocument(mockXmlDoc);
-
-      // Test that the method exists and can be called
-      expect(typeof doc.get).toBe('function');
-
-      // For now, we'll test that it handles the call gracefully
       const result = doc.get('//test');
 
-      // The actual xpath functionality is tested in integration tests
-      // Here we just verify the method signature and error handling
-      expect(result).toBeNull(); // Expected since mockXmlDoc doesn't have real xpath
+      expect(result).toBeInstanceOf(XMLElement);
+      expect(result.text()).toBe('test');
+      expect(mockXmlDoc.find).toHaveBeenCalledWith('//test');
     });
 
     it('should return null for failed XPath query', async () => {
+      mockXmlDoc.find.mockReturnValue([]);
+
       const doc = new ParsedXMLDocument(mockXmlDoc);
       const result = doc.get('//nonexistent');
 
       expect(result).toBeNull();
+      expect(mockXmlDoc.find).toHaveBeenCalledWith('//nonexistent');
     });
 
     it('should return null for XPath errors', async () => {
       jest.spyOn(console, 'warn').mockImplementation();
+      mockXmlDoc.find.mockImplementation(() => {
+        throw new Error('Invalid XPath');
+      });
 
       const doc = new ParsedXMLDocument(mockXmlDoc);
       const result = doc.get('invalid//xpath');
 
       expect(result).toBeNull();
+      expect(console.warn).toHaveBeenCalled();
     });
 
     it('should handle null xmlDoc', async () => {
@@ -109,11 +109,16 @@ describe('XMLParser', () => {
     });
 
     it('should return first match when multiple nodes found', async () => {
+      const mockNode1 = { text: () => 'first', line: () => 1 };
+      const mockNode2 = { text: () => 'second', line: () => 2 };
+      mockXmlDoc.find.mockReturnValue([mockNode1, mockNode2]);
+
       const doc = new ParsedXMLDocument(mockXmlDoc);
       const result = doc.get('//multiple');
 
-      // For unit tests, we just verify the interface works
-      expect(result).toBeNull(); // Expected for mock xmlDoc
+      expect(result).toBeInstanceOf(XMLElement);
+      expect(result.text()).toBe('first');
+      expect(mockXmlDoc.find).toHaveBeenCalledWith('//multiple');
     });
   });
 

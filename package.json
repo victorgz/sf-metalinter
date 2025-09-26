@@ -36,10 +36,9 @@
     "@oclif/core": "^4",
     "@salesforce/core": "^8",
     "@salesforce/sf-plugins-core": "^12",
-    "@xmldom/xmldom": "^0.9.8",
     "glob": "^11.0.3",
-    "minimatch": "^10.0.3",
-    "xpath": "^0.0.34"
+    "libxmljs": "^1.0.11",
+    "minimatch": "^10.0.3"
   },
   "devDependencies": {
     "@salesforce/dev-scripts": "^10",

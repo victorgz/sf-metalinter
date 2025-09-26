@@ -1,22 +1,20 @@
-import xpath from 'xpath';
-import { DOMParser } from '@xmldom/xmldom';
+import libxmljs from 'libxmljs';
 
 // Wrapper class to provide a consistent interface for XML elements
 class XMLElement {
-  constructor(domNode) {
-    this.domNode = domNode;
+  constructor(libxmlNode) {
+    this.libxmlNode = libxmlNode;
   }
 
   text() {
-    if (!this.domNode) return '';
-    // Get text content from the DOM node
-    const text = this.domNode.textContent || this.domNode.nodeValue || '';
-    return text.trim();
+    if (!this.libxmlNode) return '';
+    // Get text content from the libxmljs node
+    return this.libxmlNode.text().trim();
   }
 
   line() {
-    // @xmldom/xmldom provides line number information
-    return this.domNode?.lineNumber;
+    // libxmljs provides line number information
+    return this.libxmlNode.line();
   }
 }
 
@@ -30,8 +28,8 @@ class ParsedXMLDocument {
     if (!this.xmlDoc) return null;
 
     try {
-      // Use xpath.select to find nodes
-      const nodes = xpath.select(xpathExpression, this.xmlDoc);
+      // Use libxmljs find method for XPath queries
+      const nodes = this.xmlDoc.find(xpathExpression);
 
       // Return the first match if found
       if (nodes && nodes.length > 0) {
@@ -42,6 +40,19 @@ class ParsedXMLDocument {
     }
 
     return null;
+  }
+
+  getAll(xpathExpression) {
+    if (!this.xmlDoc) return [];
+
+    try {
+      // Use libxmljs find method for XPath queries - returns all matches
+      const nodes = this.xmlDoc.find(xpathExpression);
+      return nodes.map((node) => new XMLElement(node));
+    } catch (error) {
+      console.warn(`XPath query failed for: ${xpathExpression}`, error.message);
+      return [];
+    }
   }
 }
 
@@ -62,15 +73,8 @@ function parseXml(xmlString) {
     // Normalize namespaces to avoid parsing issues
     const normalizedXml = normalizeXmlNamespaces(xmlString);
 
-    // Parse with standard configuration
-    const parser = new DOMParser();
-    const xmlDoc = parser.parseFromString(normalizedXml, 'application/xml');
-
-    // Check for parsing errors
-    const parseError = xmlDoc.getElementsByTagName('parsererror');
-    if (parseError.length > 0) {
-      throw new Error('XML parsing failed: ' + parseError[0].textContent);
-    }
+    // Parse with libxmljs
+    const xmlDoc = libxmljs.parseXml(normalizedXml);
 
     return new ParsedXMLDocument(xmlDoc);
   } catch (error) {
