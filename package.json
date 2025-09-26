@@ -38,7 +38,6 @@
     "@salesforce/sf-plugins-core": "^12",
     "@xmldom/xmldom": "^0.8.11",
     "glob": "^11.0.3",
-    "libxmljs": "^1.0.11",
     "minimatch": "^10.0.3",
     "xpath": "^0.0.34"
   },
