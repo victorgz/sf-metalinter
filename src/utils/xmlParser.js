@@ -43,6 +43,19 @@ class ParsedXMLDocument {
 
     return null;
   }
+
+  getAll(xpathExpression) {
+    if (!this.xmlDoc) return [];
+
+    try {
+      // Use xpath.select to find nodes - returns all matches
+      const nodes = xpath.select(xpathExpression, this.xmlDoc);
+      return nodes.map((node) => new XMLElement(node));
+    } catch (error) {
+      console.warn(`XPath query failed for: ${xpathExpression}`, error.message);
+      return [];
+    }
+  }
 }
 
 // Clean namespace prefixes from XML while preserving structure
@@ -66,14 +79,28 @@ function parseXml(xmlString) {
     const parser = new DOMParser();
     const xmlDoc = parser.parseFromString(normalizedXml, 'application/xml');
 
-    // Check for parsing errors
+    // Check for parsing errors - @xmldom/xmldom creates parsererror elements for invalid XML
     const parseError = xmlDoc.getElementsByTagName('parsererror');
     if (parseError.length > 0) {
       throw new Error('XML parsing failed: ' + parseError[0].textContent);
     }
 
+    // Additional check for completely invalid XML - if root element is parsererror
+    if (xmlDoc.documentElement && xmlDoc.documentElement.tagName === 'parsererror') {
+      throw new Error('XML parsing failed: ' + xmlDoc.documentElement.textContent);
+    }
+
+    // Check if the document has any valid elements
+    if (!xmlDoc.documentElement) {
+      throw new Error('XML parsing failed: No valid XML elements found');
+    }
+
     return new ParsedXMLDocument(xmlDoc);
   } catch (error) {
+    // Re-throw with consistent error message format
+    if (error.message.startsWith('XML parsing failed:')) {
+      throw error;
+    }
     throw new Error(`XML parsing failed: ${error.message}`);
   }
 }
