@@ -1,3 +1,4 @@
+/* eslint-disable max-len */
 export default {
   'missing-description': {
     priority: 2,
@@ -64,5 +65,60 @@ export default {
       }
     },
     include: ['**/*.namedCredential-meta.xml'],
+  },
+  'flow-avoid-copy-elements': {
+    priority: 2,
+    description:
+      'Avoid default API names like "Copy_X_Of_Element". Rename copied elements for better Flow readability.',
+    linter: function ({ file, report }) {
+      // Check for Flow elements with copy naming pattern
+      const copyPattern = /Copy_[0-9]+_of_[A-Za-z0-9]+/;
+
+      // Find all <name> elements (not name attributes)
+      const elementsWithNames = file.parsedXml?.getAll('//name');
+
+      if (elementsWithNames) {
+        for (const element of elementsWithNames) {
+          // Get the text content of the <name> element
+          const elementName = element.text();
+          if (elementName && copyPattern.test(elementName)) {
+            report(
+              `Flow element "${elementName}" uses copy naming pattern. Consider updating the API name for better readability.`,
+              element.line()
+            );
+          }
+        }
+      }
+    },
+    include: ['**/*.flow-meta.xml'],
+  },
+  'flow-get-records-prevent-all-fields': {
+    priority: 2,
+    description:
+      'Get Records elements should not use "Get All Fields" without specifying specific fields to query. This can impact performance and should be avoided.',
+    linter: function ({ file, report }) {
+      // Find all Get Records elements that have storeOutputAutomatically=true
+      const problematicElements = file.parsedXml?.getAll(
+        '//recordLookups[storeOutputAutomatically="true" and not(queriedFields)]'
+      );
+
+      if (problematicElements) {
+        for (const element of problematicElements) {
+          if (!element) continue;
+
+          // Get the name of this specific element
+          const nameNodes = file.parsedXml?.getAll(
+            '//recordLookups[storeOutputAutomatically="true" and not(queriedFields)]/name'
+          );
+          const elementName = nameNodes && nameNodes.length > 0 ? nameNodes[0].text() : 'Unnamed Get Records element';
+
+          report(
+            `Get Records element "${elementName}" uses "Get All Fields" without specifying specific fields. This can impact performance.`,
+            element.line()
+          );
+        }
+      }
+    },
+    include: ['**/*.flow-meta.xml'],
   },
 };
