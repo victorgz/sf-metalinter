@@ -1,3 +1,10 @@
+## [0.5.2](https://github.com/victorgz/sf-metalinter/compare/v0.5.1...v0.5.2) (2026-07-30)
+
+
+### Bug Fixes
+
+* automatic release publishing ([9546312](https://github.com/victorgz/sf-metalinter/commit/9546312e64562a62af81a04a3ddbdca16a318671))
+
 ## [0.5.1](https://github.com/victorgz/sf-metalinter/compare/v0.5.0...v0.5.1) (2026-07-30)
 
 
