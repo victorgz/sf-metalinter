@@ -1,3 +1,10 @@
+## [0.5.1](https://github.com/victorgz/sf-metalinter/compare/v0.5.0...v0.5.1) (2026-07-30)
+
+
+### Bug Fixes
+
+* exclude metadata types from missing description rules ([c27b06f](https://github.com/victorgz/sf-metalinter/commit/c27b06f227b67bd8989f9864fb17e9c187531f4c))
+
 # [0.5.0](https://github.com/victorgz/sf-metalinter/compare/v0.4.2...v0.5.0) (2025-09-26)
 
 
