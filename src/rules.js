@@ -9,6 +9,17 @@ export default {
         report('XML metadata is missing description');
       }
     },
+    exclude: [
+      '**/*.cls-meta.xml',
+      '**/*.fieldTranslation-meta.xml',
+      '**/*.globalValueSetTranslation-meta.xml',
+      '**/*.layout-meta.xml',
+      '**/*.queue-meta.xml',
+      '**/*.settings-meta.xml',
+      '**/*.translation-meta.xml',
+      '**/*.trigger-meta.xml',
+      '**/*.workflow-meta.xml',
+    ],
   },
   'deprecated-api-version': {
     priority: 2,
